@@ -9,12 +9,14 @@ namespace Gtm.ReWebApp.Models
     {
         #region properties
         public string SessionGuid { get; private set; }
+        public ClientRoleEnum Role { get; set; }
         #endregion
 
         #region constructors
         public ClientSession()
         {
             this.SessionGuid = Guid.NewGuid().ToString();
+            this.Role = ClientRoleEnum.Undefined;
         }
         #endregion
     }

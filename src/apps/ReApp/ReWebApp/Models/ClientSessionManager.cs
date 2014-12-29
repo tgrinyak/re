@@ -36,9 +36,29 @@ namespace Gtm.ReWebApp.Models
         #region methods
 
         #region public
+        public ClientSession CreateClientSession()
+        {
+            ClientSession newClientSession = new ClientSession();
+
+            lock (this._clienSessions)
+            {
+                this._clienSessions.Add(newClientSession.SessionGuid, newClientSession);
+            }
+
+            return newClientSession;
+        }
+
+        public void DestroyClientSession(ClientSession clientSession)
+        {
+            lock (this._clienSessions)
+            {
+                this._clienSessions.Remove(clientSession.SessionGuid);
+            }
+        }
+
         public ClientSession GetClientSession(string csid)
         {
-            Debug.Assert(string.IsNullOrEmpty(csid), "unexpected client session id");
+            Debug.Assert(!string.IsNullOrEmpty(csid), "unexpected client session id");
 
             ClientSession clientSession;
             lock(this._clienSessions)

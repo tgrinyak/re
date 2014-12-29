@@ -91,12 +91,17 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\ClientSessionFilterAttribute.cs" />
     <Compile Include="Controllers\AbstractController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="CustomTypeSerializers\DictionaryConverter.cs" />
     <Compile Include="CustomTypeSerializers\NewtonsoftJsonResult.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientRoleEnum.cs" />
     <Compile Include="Models\ClientSession.cs" />
     <Compile Include="Models\ClientSessionManager.cs" />
     <Compile Include="Models\JsonResponses\AbstractJsonResponse.cs" />
@@ -108,6 +113,9 @@
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -117,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Default\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

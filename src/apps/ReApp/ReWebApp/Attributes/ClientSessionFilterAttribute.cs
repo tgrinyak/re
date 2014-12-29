@@ -22,6 +22,7 @@ namespace Gtm.ReWebApp.Attributes
         #region constructors
         public ClientSessionFilterAttribute()
         {
+            base.Order = 1;
             this.ClientSessionRequires = true;
         }
         #endregion
