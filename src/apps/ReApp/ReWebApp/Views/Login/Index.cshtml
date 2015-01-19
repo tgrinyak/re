@@ -8,8 +8,11 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>RE - login</title>
-    <script src="~/Scripts/Gtm/Application/client.js"></script>
     <script src="~/Scripts/jquery-1.8.3.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.2.js"></script>
+    <script src="~/Scripts/Gtm/System.js"></script>
+    <script src="~/Scripts/Gtm/Application/loginpage.js"></script>
+    <script src="~/Scripts/Gtm/Application/client.js"></script>
 </head>
 <body>
     <h2>Views/Login/Index.cshtml</h2>
@@ -20,12 +23,8 @@
 </html>
 <script type="text/javascript">
     (function () {
-        console.log("function started");
-        console.log(Gtm);
-        console.log(Gtm.Application);
-        console.log(Gtm.Application.Client);
-        console.log(Gtm.Application.Client.init);
         Gtm.Application.Client.init();
+        Gtm.Application.Client.showPage();
     })();
 </script>
 

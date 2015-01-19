@@ -87,8 +87,12 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Gtm\Application\client.js" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="Scripts\Gtm\Application\loginpage.js" />
+    <Content Include="Scripts\Gtm\System.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.11.2.js" />
+    <Content Include="Scripts\jquery-ui-1.11.2.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
