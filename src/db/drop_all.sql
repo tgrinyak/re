@@ -1,0 +1,3 @@
+DROP DATABASE re;
+
+DROP ROLE re_root;
