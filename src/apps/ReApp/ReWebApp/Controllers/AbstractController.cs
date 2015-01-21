@@ -17,6 +17,13 @@ namespace Gtm.ReWebApp.Controllers
         public ClientSession ClientSession { get; set; }
         #endregion
 
+        #region constructors
+        protected AbstractController()
+        {
+            this.ClientSession = null;
+        }
+        #endregion
+
         #region methods
 
         #region public

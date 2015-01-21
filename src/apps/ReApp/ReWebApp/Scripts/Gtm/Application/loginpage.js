@@ -2,12 +2,12 @@
 (function (Gtm) {
     (function (Application) {
 
-        var _userName;
-        var _contentDiv;
-        var _userNameElem;
-        var _passwordElem;
-
         var LoginPage = (function () {
+
+            var _userName;
+            var _contentDiv;
+            var _userNameElem;
+            var _passwordElem;
 
             function LoginPage() {
                 console.log("test from Gtm.Application.LoginPage()");
@@ -36,7 +36,6 @@
             function _buildContentDiv() {
                 _contentDiv = $("<div style='width:100%'/>");
 
-                //var loginDiv = $("<div style='margin:auto'/>").appendTo(_contentDiv);
                 var loginTable = $("<table style='margin:auto'/>").appendTo(_contentDiv);
                 var row = $("<tr/>").appendTo(loginTable);
                 var cell = $("<td/>").appendTo(row);
@@ -53,14 +52,26 @@
                 row = $("<tr/>").appendTo(loginTable);
                 cell = $("<td/>").appendTo(row);
                 // login submite button
-                var loginSubmitButtonDiv = $("<button style='width:100%'>sign in</button>").appendTo(cell)
+                $("<button style='width:100%'>sign in</button>").appendTo(cell)
                     .button()
-                    .click(function (event) {
+                    .on("click", function (event) {
+                        var self = $(this);
+                        self.prop("disabled", true);
                         console.log("loginSubmitButton clicked!");
                         var userName = _userNameElem.val();
                         var password = _passwordElem.val();
                         _passwordElem.val("");
                         console.log("un: " + userName + ", pw: " + password);
+                        var param = {
+                            un: userName,
+                            pw: password
+                        };
+                        $.postJson("Login/login", param, function (responseData) {
+                            console.log("login accomplished, ResponseType: " + responseData.ResponseType + ", uRole: " + responseData.Param.uRole);
+                            Gtm.Application.Client.csid(responseData.Param.csid);
+                            Gtm.Application.Client.userRole(responseData.Param.uRole.toLowerCase());
+                            self.prop("disabled", false);
+                        });
                     });
             }
 

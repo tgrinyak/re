@@ -4,25 +4,32 @@
 
         var Client = (function () {
 
-            var currentPage;
+            var _currentPage;
+            var _csid;
+            var _userRole;
 
             function Client() {
                 console.log("test from Gtm.Application.Client()");
-                currentPage = "login";
+                _currentPage = "login";
+                _csid = undefined;
+                _userRole = undefined;
             }
 
             Client.init = function () {
                 console.log("test from Gtm.Application.Client.init()");
 
-                if ("login" !== currentPage) {
-                    currentPage = "login";
+                if ("login" !== _currentPage) {
+                    _currentPage = "login";
                 }
 
             };
 
             Client.showPage = function () {
                 var page;
-                switch (currentPage) {
+                switch (_currentPage) {
+                    case "admin":
+                        page = Gtm.Application.AdminPage.getPageContent();
+                        break;
                     case "login":
                     default:
                         page = Gtm.Application.LoginPage.getPageContent();
@@ -34,6 +41,35 @@
                     bodyElement.empty();
                     bodyElement.append(page);
                 }
+            };
+
+            Client.csid = function (val) {
+                if ($.isValid(val)) {
+                    _csid = val;
+                }
+                return _csid;
+            };
+
+            Client.userRole = function (val) {
+                if ($.isValid(val)) {
+                    if (_userRole !== val) {
+                        _userRole = val;
+                        switch (_userRole) {
+                            case "admin":
+                                _currentPage = "admin";
+                                break;
+                            case "user":
+                                _currentPage = "user";
+                                break;
+                            case "undefined":
+                            default:
+                                _currentPage = "login";
+                                break;
+                        }
+                        Client.showPage();
+                    }
+                }
+                return _userRole;
             };
 
             Client();

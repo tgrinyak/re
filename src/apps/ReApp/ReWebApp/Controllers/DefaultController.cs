@@ -12,37 +12,38 @@ namespace Gtm.ReWebApp.Controllers
     {
         // GET: Default
         [ClientSessionFilter(ClientSessionRequires=false)]
-        public ActionResult Index()
+        public ActionResult Load()
         {
-            // [temp]
-            //base.ClientSession = ClientSessionManager.Instance.CreateClientSession();
-            //base.ClientSession.Role = ClientRoleEnum.Admin;
-            if (null == base.ClientSession)
-            {
-                //return RedirectToAction("");
-                return base.Redirect("Login/Index");
-            }
-            else
-            {
-                if (ClientRoleEnum.Admin == (base.ClientSession.Role & ClientRoleEnum.Admin))
-                {
-                    return Redirect("Admin/Index?"
-                                    + ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME
-                                    + "="
-                                    + base.ClientSession.SessionGuid);
-                }
-                else if(ClientRoleEnum.User == (base.ClientSession.Role & ClientRoleEnum.User))
-                {
-                    return Redirect("User/Index?"
-                                    + ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME
-                                    + "="
-                                    + base.ClientSession.SessionGuid);
-                }
-                else
-                {
-                    return Redirect("Login/Index");
-                }
-            }
+            return View();
+            //// [temp]
+            ////base.ClientSession = ClientSessionManager.Instance.CreateClientSession();
+            ////base.ClientSession.Role = ClientRoleEnum.Admin;
+            //if (null == base.ClientSession)
+            //{
+            //    //return RedirectToAction("");
+            //    return base.Redirect("Login/Index");
+            //}
+            //else
+            //{
+            //    if (ClientRoleEnum.Admin == (base.ClientSession.Role & ClientRoleEnum.Admin))
+            //    {
+            //        return Redirect("Admin/Index?"
+            //                        + ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME
+            //                        + "="
+            //                        + base.ClientSession.SessionGuid);
+            //    }
+            //    else if(ClientRoleEnum.User == (base.ClientSession.Role & ClientRoleEnum.User))
+            //    {
+            //        return Redirect("User/Index?"
+            //                        + ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME
+            //                        + "="
+            //                        + base.ClientSession.SessionGuid);
+            //    }
+            //    else
+            //    {
+            //        return Redirect("Login/Index");
+            //    }
+            //}
         }
     }
 }
