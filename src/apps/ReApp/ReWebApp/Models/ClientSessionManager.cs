@@ -52,6 +52,7 @@ namespace Gtm.ReWebApp.Models
         {
             lock (this._clienSessions)
             {
+                clientSession.Role = ClientRoleEnum.Undefined;
                 this._clienSessions.Remove(clientSession.SessionGuid);
             }
         }

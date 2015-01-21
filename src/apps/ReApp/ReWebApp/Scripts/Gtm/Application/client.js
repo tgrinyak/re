@@ -30,6 +30,9 @@
                     case "admin":
                         page = Gtm.Application.AdminPage.getPageContent();
                         break;
+                    case "user":
+                        page = Gtm.Application.UserPage.getPageContent();
+                        break;
                     case "login":
                     default:
                         page = Gtm.Application.LoginPage.getPageContent();
@@ -41,6 +44,15 @@
                     bodyElement.empty();
                     bodyElement.append(page);
                 }
+            };
+
+            Client.loginComplete = function (csid, role) {
+                Client.csid(csid);
+                Client.userRole(role);
+            };
+
+            Client.logoutComplete = function () {
+                Client.userRole("undefined");
             };
 
             Client.csid = function (val) {
@@ -62,7 +74,10 @@
                                 _currentPage = "user";
                                 break;
                             case "undefined":
+                                _currentPage = "login";
+                                break;
                             default:
+                                console.log("[warn]: unexpected userRole: " + _userRole);
                                 _currentPage = "login";
                                 break;
                         }

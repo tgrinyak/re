@@ -57,7 +57,7 @@
                     .on("click", function (event) {
                         var self = $(this);
                         self.prop("disabled", true);
-                        console.log("loginSubmitButton clicked!");
+                        console.log("'sign in' clicked!");
                         var userName = _userNameElem.val();
                         var password = _passwordElem.val();
                         _passwordElem.val("");
@@ -68,8 +68,8 @@
                         };
                         $.postJson("Login/login", param, function (responseData) {
                             console.log("login accomplished, ResponseType: " + responseData.ResponseType + ", uRole: " + responseData.Param.uRole);
-                            Gtm.Application.Client.csid(responseData.Param.csid);
-                            Gtm.Application.Client.userRole(responseData.Param.uRole.toLowerCase());
+                            Gtm.Application.Client.loginComplete(responseData.Param.csid,
+                                                                 responseData.Param.uRole.toLowerCase());
                             self.prop("disabled", false);
                         });
                     });

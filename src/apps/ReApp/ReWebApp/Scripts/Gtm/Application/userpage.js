@@ -2,16 +2,16 @@
 (function (Gtm) {
     (function (Application) {
 
-        var AdminPage = (function () {
+        var UserPage = (function () {
 
             var _contentDiv;
 
-            function AdminPage() {
-                console.log("test from Gtm.Application.AdminPage()");
+            function UserPage() {
+                console.log("test from Gtm.Application.UserPage()");
                 _contentDiv = undefined;
             }
 
-            AdminPage.getPageContent = function () {
+            UserPage.getPageContent = function () {
                 if ($.isInvalid(_contentDiv)) {
                     _buildContentDiv();
                 } else {
@@ -23,7 +23,7 @@
 
             function _buildContentDiv() {
                 _contentDiv = $("<div style='width:100%'/>");
-                $("<h2>Admin page</h2><div>Hi there!</div>").appendTo(_contentDiv);
+                $("<h2>User page</h2><div>Hi there!</div>").appendTo(_contentDiv);
                 $("<button>log out</button>").appendTo(_contentDiv)
                     .button()
                     .on("click", function (event) {
@@ -41,10 +41,10 @@
             function _resetContentDiv() {
             }
 
-            AdminPage();
-            return AdminPage;
+            UserPage();
+            return UserPage;
         })();
-        Application.AdminPage = AdminPage;
+        Application.UserPage = UserPage;
 
     })(Gtm.Application || (Gtm.Application = {}));
     var Application = Gtm.Application;

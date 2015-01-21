@@ -11,5 +11,10 @@ namespace Gtm.ReWebApp.Models.JsonResponses
             :base("success", param)
         {
         }
+
+        public SuccessJsonResponse()
+            : base("success", new object())
+        {
+        }
     }
 }

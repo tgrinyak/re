@@ -15,7 +15,7 @@ namespace Gtm.ReWebApp
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{csid}",
+                url: "", //"{controller}/{action}/{csid}",
                 defaults: new { controller = "Default", action = "Load", csid = UrlParameter.Optional }
             );
 

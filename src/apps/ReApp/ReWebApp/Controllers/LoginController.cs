@@ -11,12 +11,12 @@ namespace Gtm.ReWebApp.Controllers
 {
     public class LoginController : AbstractController
     {
-        // GET: Login
-        [ClientSessionFilter(ClientSessionRequires = false)]
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //// GET: Login
+        //[ClientSessionFilter(ClientSessionRequires = false)]
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [ClientSessionFilter(ClientSessionRequires = false)]
         public ActionResult login(string un, string pw)
@@ -30,7 +30,7 @@ namespace Gtm.ReWebApp.Controllers
             // ..
 
             // temp
-            base.ClientSession.Role = ClientRoleEnum.Admin;
+            base.ClientSession.Role = ClientRoleEnum.User;
 
             Dictionary<string, object> responseParam = new Dictionary<string, object>();
 
@@ -38,15 +38,21 @@ namespace Gtm.ReWebApp.Controllers
             responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
             responseParam.Add("uRole", base.ClientSession.Role.ToString("F"));
 
-            // temp
-            System.Threading.Thread.Sleep(2000);
-
             return Json(new SuccessJsonResponse(responseParam));
         }
 
-        public ActionResult Temp()
+        [ClientSessionFilter(ClientSessionRequires = false)]
+        public ActionResult logout()
         {
-            return View();
+            if(null != base.ClientSession)
+            {
+                ClientSessionManager.Instance.DestroyClientSession(base.ClientSession);
+            }
+
+            Dictionary<string, object> responseParam = new Dictionary<string, object>();
+            responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
+
+            return Json(new SuccessJsonResponse(responseParam));
         }
     }
 }
