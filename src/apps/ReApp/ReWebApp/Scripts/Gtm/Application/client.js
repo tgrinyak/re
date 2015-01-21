@@ -53,6 +53,7 @@
 
             Client.logoutComplete = function () {
                 Client.userRole("undefined");
+                _csid = undefined;
             };
 
             Client.csid = function (val) {

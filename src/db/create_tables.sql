@@ -18,7 +18,9 @@ CREATE TABLE IF NOT EXISTS userCredentialsTbl(
 );
 
 INSERT INTO userCredentialsTbl (email, role, password)
- VALUES ('admin', 'admin', 'rootpass');
+ VALUES ('admin', 'admin', 'root'),
+        ('adm', 'admin', 'qwe'),
+        ('usr', 'user', 'qwe')
 
 --CREATE TABLE IF NOT EXISTS userInfoTabl(
 -- first_name				VARCHAR NOT NULL,
