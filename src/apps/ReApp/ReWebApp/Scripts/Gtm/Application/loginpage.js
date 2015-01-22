@@ -88,6 +88,7 @@
                     switch (responseData.ResponseType) {
                         case "success":
                             Gtm.Application.Client.loginComplete(responseData.Param.csid,
+                                                                 responseData.Param.uName,
                                                                  responseData.Param.uRole.toLowerCase());
                             break;
                         case "error":

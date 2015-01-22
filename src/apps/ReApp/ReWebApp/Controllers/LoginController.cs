@@ -62,6 +62,7 @@ namespace Gtm.ReWebApp.Controllers
                                         // success behaviour
                                         Dictionary<string, object> responseParam = new Dictionary<string, object>();
                                         responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
+                                        responseParam.Add("uName", un);
                                         responseParam.Add("uRole", base.ClientSession.Role.ToString("F"));
 
                                         jsonResponse = new SuccessJsonResponse(responseParam);

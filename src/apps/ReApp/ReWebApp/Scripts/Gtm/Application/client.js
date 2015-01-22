@@ -6,13 +6,15 @@
 
             var _currentPage;
             var _csid;
-            var _userRole;
+            var _name;
+            var _role;
 
             function Client() {
                 console.log("test from Gtm.Application.Client()");
                 _currentPage = "login";
                 _csid = undefined;
-                _userRole = undefined;
+                _name = undefined;
+                _role = undefined;
             }
 
             Client.init = function () {
@@ -28,7 +30,8 @@
                 var page;
                 switch (_currentPage) {
                     case "admin":
-                        page = Gtm.Application.AdminPage.getPageContent();
+                        //page = Gtm.Application.AdminPage.getPageContent();
+                        Gtm.Application.AdminPage.showPage($(document.body));
                         break;
                     case "user":
                         page = Gtm.Application.UserPage.getPageContent();
@@ -46,13 +49,15 @@
                 }
             };
 
-            Client.loginComplete = function (csid, role) {
+            Client.loginComplete = function (csid, userName, role) {
                 Client.csid(csid);
+                Client.userName(userName);
                 Client.userRole(role);
             };
 
             Client.logoutComplete = function () {
                 Client.userRole("undefined");
+                //Client.userName("");
                 _csid = undefined;
             };
 
@@ -63,11 +68,19 @@
                 return _csid;
             };
 
+            Client.userName = function (val) {
+                if ($.isValid(val)) {
+                    _name = val;
+                }
+                return _name;
+            }
+
             Client.userRole = function (val) {
                 if ($.isValid(val)) {
-                    if (_userRole !== val) {
-                        _userRole = val;
-                        switch (_userRole) {
+                    if (_role !== val) {
+                        // we switch page
+                        _role = val;
+                        switch (_role) {
                             case "admin":
                                 _currentPage = "admin";
                                 break;
@@ -78,14 +91,14 @@
                                 _currentPage = "login";
                                 break;
                             default:
-                                console.log("[warn]: unexpected userRole: " + _userRole);
+                                console.log("[warn]: unexpected userRole: " + _role);
                                 _currentPage = "login";
                                 break;
                         }
                         Client.showPage();
                     }
                 }
-                return _userRole;
+                return _role;
             };
 
             Client();
