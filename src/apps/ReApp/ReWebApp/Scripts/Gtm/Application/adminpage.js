@@ -12,6 +12,10 @@
             //var _searchSettingsButton;
             var _searchButton;
             var _logoutButton;
+            var _userListDiv;
+            //var _userListTable;
+            //var _userListStorage;
+            var _userMeta;
 
             function AdminPage() {
                 console.log("test from Gtm.Application.AdminPage()");
@@ -22,6 +26,25 @@
                 //_searchSettingsButton = undefined;
                 _searchButton = undefined;
                 _logoutButton = undefined;
+                _userListDiv = undefined;
+                //_userListTable = undefined;
+                //_userListStorage = [];
+                _userMeta = [
+                    { name: "", dataName: "email" },
+                    { name: "", dataName: "role" },
+                    { name: "", dataName: "first_name" },
+                    { name: "", dataName: "first_name_furigana" },
+                    { name: "", dataName: "last_name" },
+                    { name: "", dataName: "last_name_furigana" },
+                    { name: "", dataName: "date_of_birth" },
+                    { name: "", dataName: "sex" },
+                    { name: "", dataName: "contact_information" },
+                    { name: "", dataName: "post_number" },
+                    { name: "", dataName: "address" },
+                    { name: "", dataName: "registrated_service" },
+                    { name: "", dataName: "loan_payment_period" },
+                    { name: "", dataName: "loan_value" }
+                ];
             }
             
             AdminPage.showPage = function (parentElement) {
@@ -52,8 +75,12 @@
 
             function _buildContentDiv() {
                 _contentDiv = $("<div style='text-align:center;width:80%;margin:auto'/>");
+
+                // title
                 _titleDiv = $("<div style='width:100%;display:block;'/>").appendTo(_contentDiv);
                 _titleDiv.text(_pageTitle());
+
+                // menu
                 var menuDiv = $("<div style='width:100%;display:block;text-align:left'/>").appendTo(_contentDiv);
                 _newButton = $("<button>new</button>").appendTo(menuDiv)
                     .button()
@@ -68,6 +95,10 @@
                 _logoutButton = $("<button>log out</button>").appendTo(menuDiv)
                     .button()
                     .on("click", _onClickLogout);
+
+                // user list
+                //_userListDiv = $("<div style='overflow-x:scroll;overflow-y:scroll;'/>").appendTo(_contentDiv);
+                _userListDiv = $("<div style='text-align:left;overflow-x:scroll;'/>").appendTo(_contentDiv);
 
                 // temp
                 $("<h2>Admin page</h2><div>Hi there!</div>").appendTo(_contentDiv);
@@ -124,6 +155,24 @@
 
             function _onPostLoadComplete(responseData) {
                 console.log("Load complete");
+
+                // user list
+                var users = responseData.Param.users;
+                var userListTable = $("<table class='re-bordered'/>").appendTo(_userListDiv);
+                for (var i = 0; i < users.length; ++i) {
+                    var row = $("<tr class='re-bordered'/>").appendTo(userListTable);
+                    for (var j = 0; j < _userMeta.length; ++j) {
+                        var cell = $("<td class='re-bordered'/>").appendTo(row);
+                        var cellValue = users[i][_userMeta[j].dataName];
+                        if ($.isValid(cellValue)) {
+                            cell.text(cellValue);
+                        }
+                    }
+                    row.appendTo(userListTable);
+                }
+
+                _userListDiv.empty();
+                _userListDiv.append(userListTable);
             }
 
             AdminPage();

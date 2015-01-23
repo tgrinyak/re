@@ -1,0 +1,12 @@
+.re-bordered {
+    border: 1px solid black;
+}
+table.re-bordered{
+    border: 1px solid black;
+}
+th.re-bordered{
+    border: 1px solid black;
+}
+td.re-bordered{
+    border: 1px solid black;
+}

@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Css\application.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Gtm\Application\adminpage.js" />
     <Content Include="Scripts\Gtm\Application\client.js" />
