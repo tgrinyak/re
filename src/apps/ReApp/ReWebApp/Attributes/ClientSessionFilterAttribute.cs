@@ -13,6 +13,7 @@ namespace Gtm.ReWebApp.Attributes
     {
         #region consts
         public const string CLIENT_SESSION_ID_ITEM_NAME = "csid";
+        public const string CLIENT_SESSION_LOCALIZATION_NAME = "localization";
         #endregion
 
         #region properties
@@ -36,12 +37,20 @@ namespace Gtm.ReWebApp.Attributes
             {
                 var csidParam = filterContext.HttpContext.Request.Params[CLIENT_SESSION_ID_ITEM_NAME];
                 baseController.ClientSession = !string.IsNullOrEmpty(csidParam) ? ClientSessionManager.Instance.GetClientSession(csidParam) : null;
+                var localizationParam = !string.IsNullOrEmpty(filterContext.HttpContext.Request.Params[CLIENT_SESSION_LOCALIZATION_NAME])
+                                        ? filterContext.HttpContext.Request.Params[CLIENT_SESSION_LOCALIZATION_NAME]
+                                        : "en";
 
                 // if client session is not resolved from request parameters
                 if (this.ClientSessionRequires && null == baseController.ClientSession)
                 {
                     filterContext.Result = baseController.NotAuthenticated(filterContext.HttpContext.Request.RawUrl);
                     return;
+                }
+
+                if (null != baseController.ClientSession)
+                {
+                    baseController.ClientSession.Localization = localizationParam;
                 }
             }
 

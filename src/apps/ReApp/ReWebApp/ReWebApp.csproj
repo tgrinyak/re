@@ -121,6 +121,7 @@
     <Compile Include="Models\ClientRoleEnum.cs" />
     <Compile Include="Models\ClientSession.cs" />
     <Compile Include="Models\ClientSessionManager.cs" />
+    <Compile Include="Models\Exceptions\UserInfoVerificationException.cs" />
     <Compile Include="Models\JsonResponses\AbstractJsonResponse.cs" />
     <Compile Include="Models\JsonResponses\ErrorJsonResponse.cs" />
     <Compile Include="Models\JsonResponses\SuccessJsonResponse.cs" />

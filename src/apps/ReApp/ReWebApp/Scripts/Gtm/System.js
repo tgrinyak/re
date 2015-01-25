@@ -72,6 +72,13 @@
             return undefined;
         }
 
+        function _getLocalization() {
+            if (isValid(Gtm.Application) && isValid(Gtm.Application.Client)) {
+                return Gtm.Application.Client.localization();
+            }
+            return undefined;
+        }
+
         function _embedCsidIntoUrl(url) {
             var csid = _getCsid();
             if (isValid(csid)) {
@@ -80,6 +87,15 @@
                     url += "?csid=" + csid;
                 } else {
                     url += "&csid=" + csid;
+                }
+            }
+            var localization = _getLocalization();
+            if (isValid(localization)) {
+                var splittedUtl = url.split("?");
+                if (1 === splittedUtl.length) {
+                    url += "?localization=" + localization;
+                } else {
+                    url += "&localization=" + localization;
                 }
             }
             return url;

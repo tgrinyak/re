@@ -13,12 +13,24 @@ namespace Gtm.ReWebApp.Controllers
 {
     public class LoginController : AbstractController
     {
-        //// GET: Login
-        //[ClientSessionFilter(ClientSessionRequires = false)]
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
+        private static readonly Dictionary<string, string> LOGIN_FAILED_MESSAGE_TEXT;
+        //private static readonly Dictionary<string, string> OPEN_DB_FAILED_MESSAGE_TEXT;
+        //private static readonly Dictionary<string, string> EXECUTE_DB_QUERY_MESSAGE_TEXT;
+
+        static LoginController()
+        {
+            LOGIN_FAILED_MESSAGE_TEXT = new Dictionary<string, string>();
+            LOGIN_FAILED_MESSAGE_TEXT.Add("en", "login failed, either user name or password or both are wrong");
+            LOGIN_FAILED_MESSAGE_TEXT.Add("jp", "ユーザー名やパスワードや両方と正しくありません");
+
+            //OPEN_DB_FAILED_MESSAGE_TEXT = new Dictionary<string, string>();
+            //OPEN_DB_FAILED_MESSAGE_TEXT.Add("en", "execute database request failed");
+            //OPEN_DB_FAILED_MESSAGE_TEXT.Add("jp", "データベース要求失敗しました");
+
+            //EXECUTE_DB_QUERY_MESSAGE_TEXT = new Dictionary<string, string>();
+            //EXECUTE_DB_QUERY_MESSAGE_TEXT.Add("en", "open database connection failed");
+            //EXECUTE_DB_QUERY_MESSAGE_TEXT.Add("jp", "データベース接続失敗しました");
+        }
 
         [ClientSessionFilter(ClientSessionRequires = false)]
         public ActionResult login(string un, string pw)
@@ -26,6 +38,9 @@ namespace Gtm.ReWebApp.Controllers
             if (null == base.ClientSession)
             {
                 base.ClientSession = ClientSessionManager.Instance.CreateClientSession();
+                base.ClientSession.Localization = !string.IsNullOrEmpty(base.HttpContext.Request.Params[ClientSessionFilterAttribute.CLIENT_SESSION_LOCALIZATION_NAME])
+                                        ? base.HttpContext.Request.Params[ClientSessionFilterAttribute.CLIENT_SESSION_LOCALIZATION_NAME]
+                                        : "en";
             }
 
             // here we query db for to verify credentials
@@ -47,7 +62,7 @@ namespace Gtm.ReWebApp.Controllers
                         {
                             using (var reader = dbCommand.ExecuteReader())
                             {
-                                if (reader.Read() && reader.FieldCount > 0)
+                                if (reader.Read())
                                 {
                                     ClientRoleEnum role;
                                     var value0 = reader.GetString(0);
@@ -59,6 +74,8 @@ namespace Gtm.ReWebApp.Controllers
 
                                     if (ClientRoleEnum.Undefined != base.ClientSession.Role)
                                     {
+                                        base.ClientSession.UserName = un;
+
                                         // success behaviour
                                         Dictionary<string, object> responseParam = new Dictionary<string, object>();
                                         responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
@@ -71,7 +88,7 @@ namespace Gtm.ReWebApp.Controllers
                                     {
                                         Dictionary<string, object> responseParam = new Dictionary<string, object>();
                                         responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
-                                        responseParam.Add("message", "login failed, either user name or password or both are wrong");
+                                        responseParam.Add("message", LOGIN_FAILED_MESSAGE_TEXT[base.ClientSession.Localization]);
 
                                         jsonResponse = new ErrorJsonResponse(responseParam);
                                     }
@@ -80,7 +97,7 @@ namespace Gtm.ReWebApp.Controllers
                                 {
                                     Dictionary<string, object> responseParam = new Dictionary<string, object>();
                                     responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
-                                    responseParam.Add("message", "login failed, iether user name or password or both are wrong");
+                                    responseParam.Add("message", LOGIN_FAILED_MESSAGE_TEXT[base.ClientSession.Localization]);
 
                                     jsonResponse = new ErrorJsonResponse(responseParam);
                                 }
@@ -90,7 +107,7 @@ namespace Gtm.ReWebApp.Controllers
                         {
                             Dictionary<string, object> responseParam = new Dictionary<string, object>();
                             responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
-                            responseParam.Add("message", "execute database request failed");
+                            responseParam.Add("message", EXECUTE_DB_QUERY_MESSAGE_TEXT[base.ClientSession.Localization]);
                             responseParam.Add("sqlQuery", dbCommand.CommandText);
                             responseParam.Add("exceptionMessage", ex.Message);
                             responseParam.Add("exceptionType", ex.GetType().ToString());
@@ -104,7 +121,7 @@ namespace Gtm.ReWebApp.Controllers
                 {
                     Dictionary<string, object> responseParam = new Dictionary<string, object>();
                     responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
-                    responseParam.Add("message", "open database connection failed");
+                    responseParam.Add("message", OPEN_DB_FAILED_MESSAGE_TEXT[base.ClientSession.Localization]);
                     responseParam.Add("exceptionMessage", ex.Message);
                     responseParam.Add("exceptionType", ex.GetType().ToString());
                     responseParam.Add("exceptionStackTrace", ex.StackTrace);

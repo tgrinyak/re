@@ -9,6 +9,8 @@ namespace Gtm.ReWebApp.Models
     {
         #region properties
         public string SessionGuid { get; private set; }
+        public string Localization { get; set; }
+        public string UserName { get; set; }
         public ClientRoleEnum Role { get; set; }
         #endregion
 
@@ -16,7 +18,9 @@ namespace Gtm.ReWebApp.Models
         public ClientSession()
         {
             this.SessionGuid = Guid.NewGuid().ToString();
+            this.Localization = "en";
             this.Role = ClientRoleEnum.Undefined;
+            this.UserName = string.Empty;
         }
         #endregion
     }

@@ -6,7 +6,9 @@ table.re-bordered{
 }
 th.re-bordered{
     border: 1px solid black;
+    white-space: nowrap;
 }
 td.re-bordered{
     border: 1px solid black;
+    white-space: nowrap;
 }

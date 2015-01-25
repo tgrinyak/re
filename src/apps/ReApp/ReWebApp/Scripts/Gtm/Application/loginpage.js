@@ -4,29 +4,31 @@
 
         var LoginPage = (function () {
 
-            var _userName;
             var _contentDiv;
             var _userNameElem;
             var _passwordElem;
             var _signinButton;
             var _errorDiv;
 
+            var _texts;
+
             function LoginPage() {
                 console.log("test from Gtm.Application.LoginPage()");
-                _userName = "";
+
                 _contentDiv = undefined;
                 _userNameElem = undefined;
                 _passwordElem = undefined;
                 _signinButton = undefined;
                 _errorDiv = undefined;
+
+                _texts = {
+                    welcomeText: { en: "Welcome!", jp: "ようこそ！" },
+                    loginText: { en: "log in", jp: "ログイン" }
+                };
             }
 
-            LoginPage.getPageContent = function (userName) {
-                if ($.isInvalid(userName)) {
-                    //_userName = "";
-                } else {
-                    _userName = userName;
-                }
+            LoginPage.showPage = function (parentElement) {
+                console.log("test from Gtm.Application.LoginPage.showPage()");
 
                 if ($.isInvalid(_contentDiv)) {
                     _buildContentDiv();
@@ -34,20 +36,26 @@
                     _resetContentDiv();
                 }
 
-                return _contentDiv;
+                parentElement.empty();
+                parentElement.append(_contentDiv);
+                //$.postJson("Login/Load",
+                //    { },
+                //    _onPostLoadComplete);
             };
 
             function _buildContentDiv() {
+                console.log("test from Gtm.Application.LoginPage_buildContentDiv()");
+
                 _contentDiv = $("<div style='text-align:center;width:100%'/>");
 
                 var loginTable = $("<table style='margin:auto'/>").appendTo(_contentDiv);
                 var row = $("<tr/>").appendTo(loginTable);
                 var cell = $("<td/>").appendTo(row);
-                $("<div style='margin:auto'>Welcome!</div>").appendTo(cell);
+                $("<div style='margin:auto'>" + Application.Client.getText(_texts.welcomeText) + "</div>").appendTo(cell);
 
                 row = $("<tr/>").appendTo(loginTable);
                 cell = $("<td/>").appendTo(row);
-                _userNameElem = $("<input type='text'>" + _userName + "</input>").appendTo(cell);
+                _userNameElem = $("<input type='text'>" + Application.Client.userName() + "</input>").appendTo(cell);
 
                 row = $("<tr/>").appendTo(loginTable);
                 cell = $("<td/>").appendTo(row);
@@ -56,14 +64,14 @@
                 row = $("<tr/>").appendTo(loginTable);
                 cell = $("<td/>").appendTo(row);
                 // login submite button
-                _signinButton = $("<button style='width:100%'>sign in</button>").appendTo(cell).button()
+                _signinButton = $("<button style='width:100%'>" + Application.Client.getText(_texts.loginText) + "</button>").appendTo(cell).button()
                     .on("click", _onClickSubmit);
 
                 _errorDiv = $("<div style='display:none;max-width:640;margin:auto;color:red'/>").appendTo(_contentDiv);
             }
 
             function _resetContentDiv() {
-                _userNameElem.val(_userName);
+                _userNameElem.val(Application.Client.userName());
                 _passwordElem.val("");
                 _signinButton
                     .on("click", _onClickSubmit);
@@ -110,6 +118,11 @@
                     }
                     self.prop("disabled", false);
                 });
+            }
+
+            function _onPostLoadComplete(responseData) {
+                console.log("Load complete");
+
             }
 
             LoginPage();

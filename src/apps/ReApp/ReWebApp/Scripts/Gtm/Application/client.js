@@ -8,37 +8,35 @@
             var _csid;
             var _name;
             var _role;
+            var _localization;
+            var _roleTexts;
 
             function Client() {
                 console.log("test from Gtm.Application.Client()");
                 _currentPage = "login";
                 _csid = undefined;
-                _name = undefined;
-                _role = undefined;
-            }
-
-            Client.init = function () {
-                console.log("test from Gtm.Application.Client.init()");
-
-                if ("login" !== _currentPage) {
-                    _currentPage = "login";
-                }
-
+                _localization = "jp";
+                _name = "";
+                _role = "unknown";
+                _roleTexts = {
+                    admin: { en: "admin", jp: "管理者" },
+                    user: { en: "user", jp: "ユーザー" },
+                    unknown: { en: "unknown", jp: "不明" }
+                };
             };
 
             Client.showPage = function () {
                 var page;
                 switch (_currentPage) {
                     case "admin":
-                        //page = Gtm.Application.AdminPage.getPageContent();
                         Gtm.Application.AdminPage.showPage($(document.body));
                         break;
                     case "user":
-                        page = Gtm.Application.UserPage.getPageContent();
+                        Gtm.Application.UserPage.showPage($(document.body));
                         break;
                     case "login":
                     default:
-                        page = Gtm.Application.LoginPage.getPageContent();
+                        Gtm.Application.LoginPage.showPage($(document.body));
                         break;
                 }
 
@@ -57,7 +55,6 @@
 
             Client.logoutComplete = function () {
                 Client.userRole("undefined");
-                //Client.userName("");
                 _csid = undefined;
             };
 
@@ -68,12 +65,23 @@
                 return _csid;
             };
 
+            Client.localization = function (val) {
+                if ($.isValid(val)) {
+                    _localization = val;
+                }
+                return _localization;
+            };
+
             Client.userName = function (val) {
                 if ($.isValid(val)) {
                     _name = val;
                 }
                 return _name;
-            }
+            };
+
+            Client.userNameText = function () {
+                return Client.userName();
+            };
 
             Client.userRole = function (val) {
                 if ($.isValid(val)) {
@@ -99,6 +107,14 @@
                     }
                 }
                 return _role;
+            };
+
+            Client.userRoleText = function () {
+                return _roleTexts[_role][_localization];
+            };
+
+            Client.getText = function (param) {
+                return param[_localization];
             };
 
             Client();
