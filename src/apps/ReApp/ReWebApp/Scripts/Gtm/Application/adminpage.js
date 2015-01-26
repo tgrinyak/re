@@ -7,7 +7,7 @@
             var _USERS_COUNT = 10;
             var _contentDiv;
             var _titleDiv;
-            var _mainMenuDiv;
+            var _userListMenuDiv;
             var _newButton;
             var _searchKeyElem;
             //var _searchSettingsButton;
@@ -16,6 +16,9 @@
 
             // user list
             var _userListDiv;
+            //var _userListRemoveButtons;
+            //var _userListEditButtons;
+            var _userListMeta;
 
             // new user
             var _newUserDiv;
@@ -24,21 +27,31 @@
             var _newUserInputElements;
             var _newUserMeta;
 
-            var _userMeta;
+            // edit user
+            var _editUserDiv;
+            var _editUserSubmit;
+            var _editUserCancel;
+            var _editUserInputElements;
+            var _editUserMeta;
+
             var _texts;
 
             function AdminPage() {
                 console.log("test from Gtm.Application.AdminPage()");
                 _contentDiv = undefined;
                 _titleDiv = undefined;
-                _mainMenuDiv = undefined;
+                _userListMenuDiv = undefined;
                 _newButton = undefined;
                 _searchKeyElem = undefined;
                 //_searchSettingsButton = undefined;
                 _searchButton = undefined;
                 _logoutButton = undefined;
                 _userListDiv = undefined;
+                //_userListRemoveButtons = [];
+                //_userListEditButtons = [];
+                _userListMeta = [];
 
+                // new user
                 _newUserDiv = undefined;
                 _newUserSubmit = undefined;
                 _newUserCancel = undefined;
@@ -62,29 +75,36 @@
                     "loan_value"
                 ];
 
-                _userMeta = [
-                    { name: "colomn1", dataName: "email" },
-                    { name: "colomn2", dataName: "role" },
-                    { name: "colomn3", dataName: "password" },
-                    { name: "colomn4", dataName: "first_name" },
-                    { name: "colomn5", dataName: "first_name_furigana" },
-                    { name: "colomn6", dataName: "last_name" },
-                    { name: "colomn7", dataName: "last_name_furigana" },
-                    { name: "colomn8", dataName: "date_of_birth" },
-                    { name: "colomn9", dataName: "sex" },
-                    { name: "colomn10", dataName: "contact_information" },
-                    { name: "colomn11", dataName: "post_number" },
-                    { name: "colomn12", dataName: "address" },
-                    { name: "colomn13", dataName: "registrated_service" },
-                    { name: "colomn14", dataName: "loan_payment_period" },
-                    { name: "colomn15", dataName: "loan_value" }
+                // edit user
+                _editUserDiv = undefined;
+                _editUserSubmit = undefined;
+                _editUserCancel = undefined;
+                _editUserInputElements = {};
+                _editUserMeta = [
+                    "email",
+                    "role",
+                    "password",
+                    "password_confirm",
+                    "first_name",
+                    "first_name_furigana",
+                    "last_name",
+                    "last_name_furigana",
+                    "date_of_birth",
+                    "sex",
+                    "contact_information",
+                    "post_number",
+                    "address",
+                    "registrated_service",
+                    "loan_payment_period",
+                    "loan_value"
                 ];
 
                 _texts = {
                     buttonNewText: { en: "new", jp: "新規" },
                     buttonSearchText: { en: "search", jp: "検索" },
                     buttonLogoutText: { en: "logout", jp: "ログアウト" },
-                    buttonUserListRemoveText:{en:"remove", jp:"削除"},
+                    buttonUserListRemoveText: { en: "remove", jp: "削除" },
+                    removeConfirmMessageText: { en: "remove user?", jp: "ユーザーを削除しますか？" },
                     buttonUserListEditText:{en:"edit", jp:"編集"},
                     buttonNewUserSubmitText: { en: "submit", jp: "登録" },
                     buttonNewUserCancelText: { en: "cancel", jp: "キャンセル" },
@@ -136,15 +156,15 @@
 
                 // menu
                 var menuDiv = $("<div style='width:100%;display:block;text-align:left'/>").appendTo(_contentDiv);
-                _mainMenuDiv = $("<div style='display:inline;text-align:left'/>").appendTo(menuDiv);
-                _newButton = $("<button>" + Application.Client.getText(_texts.buttonNewText) + "</button>").appendTo(_mainMenuDiv)
+                _userListMenuDiv = $("<div style='display:none;text-align:left'/>").appendTo(menuDiv);
+                _newButton = $("<button>" + Application.Client.getText(_texts.buttonNewText) + "</button>").appendTo(_userListMenuDiv)
                     .button()
                     .on("click", _onClickNew);
-                _searchKeyElem = $("<input type='text'/>").appendTo(_mainMenuDiv);
-                //_searchSettingsButton = $("<button>[]</button>").appendTo(_mainMenuDiv)
+                _searchKeyElem = $("<input type='text'/>").appendTo(_userListMenuDiv);
+                //_searchSettingsButton = $("<button>[]</button>").appendTo(_userListMenuDiv)
                 //    .button()
                 //    .on("click", _onClickSearchSettings);
-                _searchButton = $("<button>" + Application.Client.getText(_texts.buttonSearchText) + "</button>").appendTo(_mainMenuDiv)
+                _searchButton = $("<button>" + Application.Client.getText(_texts.buttonSearchText) + "</button>").appendTo(_userListMenuDiv)
                     .button()
                     .on("click", _onClickSearch);
                 _logoutButton = $("<button style='display:inline;text-align:right'>" + Application.Client.getText(_texts.buttonLogoutText) + "</button>").appendTo(menuDiv)
@@ -156,11 +176,14 @@
 
                 // new user
                 _newUserDiv = $("<div style='text-align:left;display:none;'/>").appendTo(_contentDiv);
+
+                // edit user
+                _editUserDiv = $("<div style='text-align:left;display:none;'/>").appendTo(_contentDiv);
             }
 
             function _resetContentDiv() {
                 _titleDiv.text(_pageTitle());
-                _mainMenuDiv.css("display", "inherit");
+                //_userListMenuDiv.css("display", "inline");
                 _newButton
                     .on("click", _onClickNew);
                 //_searchSettingsButton
@@ -169,8 +192,10 @@
                     .on("click", _onClickSearch);
                 _logoutButton
                     .on("click", _onClickLogout);
+                _userListMenuDiv.css("display", "none");
                 _userListDiv.css("display", "none");
                 _newUserDiv.css("display", "none");
+                _editUserDiv.css("display", "none");
             }
 
             function _pageTitle()
@@ -178,16 +203,31 @@
                 return Application.Client.userNameText() + ":" + Application.Client.userRoleText();
             }
 
+            function _getSearchKey() {
+                return _userListMeta[0];
+            }
+
             function _onClickNew(event) {
                 console.log("New clicked");
 
                 _newUserDiv.empty();
-                var table = $("<table class='re-bordered' style='display:block'/>").appendTo(_newUserDiv);
+                var table = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_newUserDiv);
                 for (var i = 0; i < _newUserMeta.length; ++i) {
                     var row = $("<tr class='re-bordered'/>").appendTo(table);
                     var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_newUserMeta[i]]) + "</div>").appendTo(row);
                     cell = $("<td class='re-bordered'/>").appendTo(row);
-                    var input = $("<input type='text'/>").appendTo(cell);
+                    var input;
+                    switch (_newUserMeta[i]) {
+                        case "password":
+                            input = $("<input type='password'/>").appendTo(cell);
+                            break;
+                        case "password_confirm":
+                            input = $("<input type='password'/>").appendTo(cell);
+                            break;
+                        default:
+                            input = $("<input type='text'/>").appendTo(cell);
+                            break;
+                    }
                     _newUserInputElements[_newUserMeta[i]] = input;
                 }
 
@@ -200,6 +240,7 @@
                     .on("click", _onClickNewUserCancel);
 
                 _userListDiv.css("display", "none");
+                _userListMenuDiv.css("display", "none");
                 _newUserDiv.css("display", "inherit");
             }
 
@@ -207,10 +248,16 @@
                 console.log("Search clicked");
 
                 var searchKey = _searchKeyElem.val();
-                _searchKeyElem.val("");
 
-                // do search
-                // ..
+                if ($.isValid(searchKey) && "" !== searchKey) {
+                    $.postJson("Admin/Search",
+                        {
+                            userCount: _USERS_COUNT,
+                            key: _getSearchKey(),
+                            pattern: searchKey
+                        },
+                        _onPostLoadComplete);
+                }
             }
 
             function _onClickLogout(event) {
@@ -249,7 +296,6 @@
                     jsonUser: JSON.stringify(user)
                 };
                 _newUserDiv.css("display", "none");
-                //_newUserDiv.empty();
                 $.postJson("Admin/NewUser",
                            param,
                            _onPostNewUserComplete);
@@ -264,32 +310,109 @@
                     _onPostLoadComplete);
             }
 
+            function _onClickEditUserSubmit(event) {
+
+                if (_editUserInputElements.password.val() !== _editUserInputElements.password_confirm.val()) {
+                    console.log("password and confirm password are not equal");
+                    return;
+                }
+
+                user = {};
+                for (var i = 0; i < _editUserMeta.length; ++i) {
+                    if ("password_confirm" !== _editUserMeta[i]) {
+                        var value = _editUserInputElements[_editUserMeta[i]].val();
+                        if ($.isValid(value) && "" !== value) {
+                            user[_editUserMeta[i]] = value;
+                        }
+                    }
+                }
+
+                var param = {
+                    jsonUser: JSON.stringify(user)
+                };
+                _editUserDiv.css("display", "none");
+                $.postJson("Admin/EditSubmit",
+                           param,
+                           _onPostEditUserSubmitComplete);
+            }
+
+            function _onClickEditUserCancel(event) {
+                _editUserDiv.css("display", "none");
+                $.postJson("Admin/Load",
+                    {
+                        userCount: _USERS_COUNT
+                    },
+                    _onPostLoadComplete);
+            }
+
             function _onPostLoadComplete(responseData) {
                 console.log("Load complete");
 
-                // user list
-                _userListDiv.empty();
-                var meta = responseData.Param.meta;
-                var users = responseData.Param.users;
-                var userListTable = $("<table class='re-bordered'/>").appendTo(_userListDiv);
-                var headerRow = $("<tr class='re-bordered'/>").appendTo(userListTable);
-                for (var i = 0; i < meta.length; ++i) {
-                    var cell = $("<th class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[meta[i]]) + "</th>").appendTo(headerRow);
-                }
-                for (var i = 0; i < users.length; ++i) {
-                    var row = $("<tr class='re-bordered'/>").appendTo(userListTable);
-                    for (var j = 0; j < meta.length; ++j) {
-                        var cell = $("<td class='re-bordered'/>").appendTo(row);
-                        var cellValue = users[i][meta[j]];
-                        if ($.isValid(cellValue)) {
-                            cell.text(cellValue);
+                switch (responseData.ResponseType) {
+                    case "success":
+                        _userListDiv.empty();
+                        _userListMeta = responseData.Param.meta;
+                        var users = responseData.Param.users;
+                        var userListTable = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_userListDiv);
+                        var headerRow = $("<tr class='re-bordered'/>").appendTo(userListTable);
+                        $("<th class='re-bordered'>" + "</th>").appendTo(headerRow);
+                        $("<th class='re-bordered'>" + "</th>").appendTo(headerRow);
+                        for (var i = 0; i < _userListMeta.length; ++i) {
+                            var cell = $("<th class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_userListMeta[i]]) + "</th>").appendTo(headerRow);
                         }
-                    }
-                    row.appendTo(userListTable);
+                        for (var i = 0; i < users.length; ++i) {
+                            var row = $("<tr class='re-bordered'/>").appendTo(userListTable);
+                            var cell = $("<td class='re-bordered'/>").appendTo(row);
+                            var email = users.email;
+                            $("<button id='edit-" + users[i].email + "'>" + Application.Client.getText(_texts.buttonUserListEditText) + "</button>").appendTo(cell)
+                                .button()
+                                .on("click", function (event) {
+                                    _editUser($(this)[0].id.split("-")[1]);
+                                });
+                            cell = $("<td class='re-bordered'/>").appendTo(row);
+                            $("<button id='remove-" + users[i].email + "'>" + Application.Client.getText(_texts.buttonUserListRemoveText) + "</button>").appendTo(cell)
+                                .button()
+                                .on("click", function (event) {
+                                    var un = $(this)[0].id.split("-")[1];
+                                    if (confirm(Application.Client.getText(_texts.removeConfirmMessageText))) {
+                                        _removeUser(un);
+                                    }
+                                });
+                            for (var j = 0; j < _userListMeta.length; ++j) {
+                                cell = $("<td class='re-bordered'/>").appendTo(row);
+                                var cellValue = users[i][_userListMeta[j]];
+                                if ($.isValid(cellValue)) {
+                                    cell.text(cellValue);
+                                }
+                            }
+                            row.appendTo(userListTable);
+                        }
+
+                        _userListDiv.append(userListTable);
+                        _userListDiv.css("display", "inherit");
+                        _userListMenuDiv.css("display", "inline");
+                        break;
+                    case "error":
+                        console.log("[error]: responseData.Param.message: " + responseData.Param.message);
+                        //$("<p>" + responseData.Param.message + "</p>").appendTo(_errorDiv);
+                        if ($.isValid(responseData.Param.exceptionMessage)) {
+                            if ($.isValid(responseData.Param.sqlQuery)) {
+                                console.log("[error]: responseData.Param.sqlQuery: " + responseData.Param.sqlQuery);
+                            }
+                            console.log("[error]: responseData.Param.exceptionMessage: " + responseData.Param.exceptionMessage);
+                            console.log("[error]: responseData.Param.exceptionType: " + responseData.Param.exceptionType);
+                            console.log("[error]: responseData.Param.exceptionStackTrace: " + responseData.Param.exceptionStackTrace);
+                            //$("<p>" + responseData.Param.exceptionMessage + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionType + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionStackTrace + "</p>").appendTo(_errorDiv);
+                        }
+                        _newUserDiv.css("display", "inherit");
+                        break;
+                    default:
+                        console.log("[warn]: unexpected responseData.ResponseType: " + responseData.ResponseType);
+                        break;
                 }
 
-                _userListDiv.append(userListTable);
-                _userListDiv.css("display", "inherit");
             }
 
             function _onPostNewUserComplete(responseData) {
@@ -307,6 +430,9 @@
                         console.log("[error]: responseData.Param.message: " + responseData.Param.message);
                         //$("<p>" + responseData.Param.message + "</p>").appendTo(_errorDiv);
                         if ($.isValid(responseData.Param.exceptionMessage)) {
+                            if ($.isValid(responseData.Param.sqlQuery)) {
+                                console.log("[error]: responseData.Param.sqlQuery: " + responseData.Param.sqlQuery);
+                            }
                             console.log("[error]: responseData.Param.exceptionMessage: " + responseData.Param.exceptionMessage);
                             console.log("[error]: responseData.Param.exceptionType: " + responseData.Param.exceptionType);
                             console.log("[error]: responseData.Param.exceptionStackTrace: " + responseData.Param.exceptionStackTrace);
@@ -320,6 +446,158 @@
                         console.log("[warn]: unexpected responseData.ResponseType: " + responseData.ResponseType);
                         break;
                 }
+            }
+
+            function _onPostEditLoadComplete(responseData) {
+                console.log("EditLoad complete");
+
+                switch (responseData.ResponseType) {
+                    case "success":
+                        var user = responseData.Param.user;
+                        _editUserDiv.empty();
+                        var table = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_editUserDiv);
+                        for (var i = 0; i < _editUserMeta.length; ++i) {
+                            var row = $("<tr class='re-bordered'/>").appendTo(table);
+                            var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_editUserMeta[i]]) + "</div>").appendTo(row);
+                            cell = $("<td class='re-bordered'/>").appendTo(row);
+                            var input;
+                            switch (_editUserMeta[i]) {
+                                case "email":
+                                    input = $("<input type='text' readonly/>").appendTo(cell);
+                                    break;
+                                case "password":
+                                    input = $("<input type='password'/>").appendTo(cell);
+                                    break;
+                                case "password_confirm":
+                                    input = $("<input type='password'/>").appendTo(cell);
+                                    break;
+                                default:
+                                    input = $("<input type='text'/>").appendTo(cell);
+                                    break;
+                            }
+                            var value = user[_editUserMeta[i]];
+                            if ($.isValid(value)) {
+                                input.val(value);
+                            }
+                            _editUserInputElements[_editUserMeta[i]] = input;
+                        }
+
+                        var footer = $("<div style='margin:auto;text-align:center'/>").appendTo(_editUserDiv);
+                        _editUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserSubmitText) + "</button>").appendTo(footer)
+                            .button()
+                            .on("click", _onClickEditUserSubmit);
+                        _editUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserCancelText) + "</button>").appendTo(footer)
+                            .button()
+                            .on("click", _onClickEditUserCancel);
+
+                        _userListDiv.css("display", "none");
+                        _userListMenuDiv.css("display", "none");
+                        _editUserDiv.css("display", "inherit");
+                        break;
+                    case "error":
+                        console.log("[error]: responseData.Param.message: " + responseData.Param.message);
+                        //$("<p>" + responseData.Param.message + "</p>").appendTo(_errorDiv);
+                        if ($.isValid(responseData.Param.exceptionMessage)) {
+                            if ($.isValid(responseData.Param.sqlQuery)) {
+                                console.log("[error]: responseData.Param.sqlQuery: " + responseData.Param.sqlQuery);
+                            }
+                            console.log("[error]: responseData.Param.exceptionMessage: " + responseData.Param.exceptionMessage);
+                            console.log("[error]: responseData.Param.exceptionType: " + responseData.Param.exceptionType);
+                            console.log("[error]: responseData.Param.exceptionStackTrace: " + responseData.Param.exceptionStackTrace);
+                            //$("<p>" + responseData.Param.exceptionMessage + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionType + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionStackTrace + "</p>").appendTo(_errorDiv);
+                        }
+                        break;
+                    default:
+                        console.log("[warn]: unexpected responseData.ResponseType: " + responseData.ResponseType);
+                        break;
+                }
+            }
+
+            function _onPostEditUserSubmitComplete(responseData) {
+                console.log("EditSubmit complete");
+
+                switch (responseData.ResponseType) {
+                    case "success":
+                        $.postJson("Admin/Load",
+                            {
+                                userCount: _USERS_COUNT
+                            },
+                            _onPostLoadComplete);
+                        break;
+                    case "error":
+                        console.log("[error]: responseData.Param.message: " + responseData.Param.message);
+                        //$("<p>" + responseData.Param.message + "</p>").appendTo(_errorDiv);
+                        if ($.isValid(responseData.Param.exceptionMessage)) {
+                            if ($.isValid(responseData.Param.sqlQuery)) {
+                                console.log("[error]: responseData.Param.sqlQuery: " + responseData.Param.sqlQuery);
+                            }
+                            console.log("[error]: responseData.Param.exceptionMessage: " + responseData.Param.exceptionMessage);
+                            console.log("[error]: responseData.Param.exceptionType: " + responseData.Param.exceptionType);
+                            console.log("[error]: responseData.Param.exceptionStackTrace: " + responseData.Param.exceptionStackTrace);
+                            //$("<p>" + responseData.Param.exceptionMessage + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionType + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionStackTrace + "</p>").appendTo(_errorDiv);
+                        }
+                        _editUserDiv.css("display", "inherit");
+                        break;
+                    default:
+                        console.log("[warn]: unexpected responseData.ResponseType: " + responseData.ResponseType);
+                        break;
+                }
+            }
+
+            function _onPostRemoveComplete(responseData) {
+                console.log("Remove complete");
+
+                switch (responseData.ResponseType) {
+                    case "success":
+                        $.postJson("Admin/Load",
+                            {
+                                userCount: _USERS_COUNT
+                            },
+                            _onPostLoadComplete);
+                        break;
+                    case "error":
+                        console.log("[error]: responseData.Param.message: " + responseData.Param.message);
+                        //$("<p>" + responseData.Param.message + "</p>").appendTo(_errorDiv);
+                        if ($.isValid(responseData.Param.exceptionMessage)) {
+                            if ($.isValid(responseData.Param.sqlQuery)) {
+                                console.log("[error]: responseData.Param.sqlQuery: " + responseData.Param.sqlQuery);
+                            }
+                            console.log("[error]: responseData.Param.exceptionMessage: " + responseData.Param.exceptionMessage);
+                            console.log("[error]: responseData.Param.exceptionType: " + responseData.Param.exceptionType);
+                            console.log("[error]: responseData.Param.exceptionStackTrace: " + responseData.Param.exceptionStackTrace);
+                            //$("<p>" + responseData.Param.exceptionMessage + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionType + "</p>").appendTo(_errorDiv);
+                            //$("<p>" + responseData.Param.exceptionStackTrace + "</p>").appendTo(_errorDiv);
+                        }
+                        break;
+                    default:
+                        console.log("[warn]: unexpected responseData.ResponseType: " + responseData.ResponseType);
+                        break;
+                }
+            }
+
+            function _editUser(email) {
+                console.log("_editUser: email: " + email);
+
+                $.postJson("Admin/EditLoad",
+                    {
+                        userName: email
+                    },
+                    _onPostEditLoadComplete);
+            }
+
+            function _removeUser(email) {
+                console.log("_removeUser: email: " + email);
+
+                $.postJson("Admin/Remove",
+                    {
+                        userName: email
+                    },
+                    _onPostRemoveComplete);
             }
 
             AdminPage();

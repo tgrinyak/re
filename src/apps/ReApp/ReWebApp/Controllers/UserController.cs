@@ -13,27 +13,6 @@ namespace Gtm.ReWebApp.Controllers
 {
     public class UserController : AbstractController
     {
-        private static readonly Dictionary<string, string> USER_NOT_FOUND_MESSAGE_TEXT;
-
-        static UserController()
-        {
-            USER_NOT_FOUND_MESSAGE_TEXT = new Dictionary<string, string>();
-            USER_NOT_FOUND_MESSAGE_TEXT.Add("en", "application error: haven't found user '{0}' information");
-            USER_NOT_FOUND_MESSAGE_TEXT.Add("jp", "アプリケーションエラー：ユーザー’{0}’詳細情報見つかりませんでした");
-        }
-        // GET: User
-        public ActionResult Index()
-        {
-            if (ClientRoleEnum.User == (base.ClientSession.Role & ClientRoleEnum.User))
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("Error/Index");
-            }
-        }
-
         public ActionResult Load(string userName)
         {
             AbstractJsonResponse jsonResponse = null;
@@ -47,9 +26,23 @@ namespace Gtm.ReWebApp.Controllers
                     using (var dbCommand = new NpgsqlCommand())
                     {
                         dbCommand.Connection = dbConnection;
-                        dbCommand.CommandText = "SELECT email, role, first_name, first_name_furigana, last_name, last_name_furigana, date_of_birth, sex, " +
-                                                       "contact_information, post_number, address, registrated_service, loan_payment_period, loan_value " +
-                                                       "FROM userCredentialsTbl WHERE email=:un LIMIT 1;";
+                        dbCommand.CommandText = "SELECT" +
+                                                " email" +
+                                                ", role" +
+                                                ", first_name" +
+                                                ", first_name_furigana" +
+                                                ", last_name" +
+                                                ", last_name_furigana" +
+                                                ", date_of_birth, sex" +
+                                                ", contact_information" +
+                                                ", post_number" +
+                                                ", address" +
+                                                ", registrated_service" +
+                                                ", loan_payment_period" +
+                                                ", loan_value" +
+                                                " FROM userCredentialsTbl" +
+                                                " WHERE email=:un" +
+                                                " LIMIT 1;";
                         dbCommand.Parameters.AddWithValue(":un", userName);
                         try
                         {
@@ -60,7 +53,15 @@ namespace Gtm.ReWebApp.Controllers
                                     Dictionary<string, object> record = new Dictionary<string, object>();
                                     for (int i = 0; i < reader.FieldCount; ++i)
                                     {
-                                        record.Add(reader.GetName(i), reader.GetValue(i));
+                                        var value = reader.GetValue(i);
+                                        if (value is DateTime)
+                                        {
+                                            record.Add(reader.GetName(i), ((DateTime)value).ToString("yyyy-MM-dd"));
+                                        }
+                                        else
+                                        {
+                                            record.Add(reader.GetName(i), value);
+                                        }
                                     }
 
                                     Dictionary<string, object> responseParam = new Dictionary<string, object>();

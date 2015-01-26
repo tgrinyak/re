@@ -16,6 +16,7 @@ namespace Gtm.ReWebApp.Controllers
         #region members
         protected static readonly Dictionary<string, string> OPEN_DB_FAILED_MESSAGE_TEXT;
         protected static readonly Dictionary<string, string> EXECUTE_DB_QUERY_MESSAGE_TEXT;
+        protected static readonly Dictionary<string, string> USER_NOT_FOUND_MESSAGE_TEXT;
         #endregion
 
         #region properties
@@ -32,6 +33,10 @@ namespace Gtm.ReWebApp.Controllers
             EXECUTE_DB_QUERY_MESSAGE_TEXT = new Dictionary<string, string>();
             EXECUTE_DB_QUERY_MESSAGE_TEXT.Add("en", "open database connection failed");
             EXECUTE_DB_QUERY_MESSAGE_TEXT.Add("jp", "データベース接続失敗しました");
+
+            USER_NOT_FOUND_MESSAGE_TEXT = new Dictionary<string, string>();
+            USER_NOT_FOUND_MESSAGE_TEXT.Add("en", "application error: haven't found user '{0}' information");
+            USER_NOT_FOUND_MESSAGE_TEXT.Add("jp", "アプリケーションエラー：ユーザー’{0}’詳細情報見つかりませんでした");
         }
 
         protected AbstractController()

@@ -154,6 +154,10 @@
                         console.log("[error]: responseData.Param.message: " + responseData.Param.message);
                         $("<p>" + responseData.Param.message + "</p>").appendTo(_errorTextDiv);
                         if ($.isValid(responseData.Param.exceptionMessage)) {
+                            if ($.isValid(responseData.Param.sqlQuery)) {
+                                console.log("[error]: responseData.Param.sqlQuery: " + responseData.Param.sqlQuery);
+                                $("<p>" + responseData.Param.sqlQuery + "</p>").appendTo(_errorDiv);
+                            }
                             console.log("[error]: responseData.Param.exceptionMessage: " + responseData.Param.exceptionMessage);
                             console.log("[error]: responseData.Param.exceptionType: " + responseData.Param.exceptionType);
                             console.log("[error]: responseData.Param.exceptionStackTrace: " + responseData.Param.exceptionStackTrace);
