@@ -77,10 +77,11 @@
             };
 
             function _buildContentDiv() {
-                _contentDiv = $("<div style='text-align:center;width:80%;margin:auto'/>");
-
+                //_contentDiv = $("<div style='text-align:center;width:80%;margin:auto'/>");
+                _contentDiv = $("<div class='re-content' style='text-align:center;width:80%;height:80%;margin:auto;padding-top:10px;padding-bottom:20px'/>");
+                
                 // title
-                _titleDiv = $("<div style='width:100%;display:block;'/>").appendTo(_contentDiv);
+                _titleDiv = $("<div class='re-content-title' style='width:100%;display:block;'/>").appendTo(_contentDiv);
                 _titleDiv.text(_pageTitle());
 
                 // menu

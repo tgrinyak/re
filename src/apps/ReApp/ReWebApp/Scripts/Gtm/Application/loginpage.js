@@ -38,18 +38,15 @@
 
                 parentElement.empty();
                 parentElement.append(_contentDiv);
-                //$.postJson("Login/Load",
-                //    { },
-                //    _onPostLoadComplete);
             };
 
             function _buildContentDiv() {
                 console.log("test from Gtm.Application.LoginPage_buildContentDiv()");
 
-                _contentDiv = $("<div style='text-align:center;width:100%'/>");
+                _contentDiv = $("<div class='re-content' style='text-align:center;width:80%;height:80%;margin:auto;padding-top:10px;padding-bottom:20px'/>");
 
-                var loginTable = $("<table style='margin:auto'/>").appendTo(_contentDiv);
-                var row = $("<tr/>").appendTo(loginTable);
+                var loginTable = $("<table class='re-content re-border' style='margin:auto;'/>").appendTo(_contentDiv);
+                var row = $("<tr class='re-content-title'/>").appendTo(loginTable);
                 var cell = $("<td/>").appendTo(row);
                 $("<div style='margin:auto'>" + Application.Client.getText(_texts.welcomeText) + "</div>").appendTo(cell);
 
