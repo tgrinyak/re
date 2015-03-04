@@ -84,6 +84,7 @@
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.0\lib\net45\System.Web.Mvc.dll</HintPath>
@@ -94,6 +95,9 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Gtm\Application\adminpage.js" />
     <Content Include="Scripts\Gtm\Application\client.js" />
+    <None Include="Properties\PublishProfiles\sbkjpn04-hosting.pubxml" />
+    <None Include="Properties\PublishProfiles\Test-localhost.pubxml" />
+    <None Include="Properties\PublishProfiles\Test-win7-hosting.pubxml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\Gtm\Application\loginpage.js" />
     <Content Include="Scripts\Gtm\Application\userpage.js" />
