@@ -66,7 +66,8 @@
                 //_signinButton = $("<button style='width:100%'>" + Application.Client.getText(_texts.loginText) + "</button>").appendTo(cell).button()
                 //    .on("click", _onClickSubmit);
                 
-                var containerDiv = $("<div class='col-md-2 col-md-offset-5 re-bordered'/>").appendTo(_contentDiv);
+                var loginRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
+                var containerDiv = $("<div class='col-md-2 col-md-offset-5 re-bordered'/>").appendTo(loginRowDiv);
                 var rowDiv = $("<div class='row'/>").appendTo(containerDiv);
                 //var cellDiv = $("<div class='col-md-2 col-md-offset-5'/>").appendTo(rowDiv);
                 var loginTitle = $("<div class='re-title re-title-lg'>" + Application.Client.getText(_texts.welcomeText) + "</div>").appendTo(rowDiv);
@@ -85,7 +86,7 @@
                     .on("click", _onClickSubmit);
 
                 //_errorDiv = $("<div style='display:none;max-width:640;margin:auto;color:red'/>").appendTo(_contentDiv);
-                _errorDiv = $("<div class='row re-error' style='display:none;'/>").appendTo(_contentDiv);
+                _errorDiv = $("<div class='row text-center re-error' style='display:none;margin:auto;'/>").appendTo(_contentDiv);
             }
 
             function _resetContentDiv() {
