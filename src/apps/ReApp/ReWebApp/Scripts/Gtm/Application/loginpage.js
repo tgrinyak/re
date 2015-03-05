@@ -43,49 +43,25 @@
             function _buildContentDiv() {
                 console.log("test from Gtm.Application.LoginPage_buildContentDiv()");
 
-                //_contentDiv = $("<div class='re-content' style='text-align:center;width:80%;height:80%;margin:auto;padding-top:10px;padding-bottom:20px'/>");
                 _contentDiv = $("<div class='container'/>");
 
-                ////var loginTable = $("<table class='re-content-narrow re-border' style='margin:auto;'/>").appendTo(_contentDiv);
-                //var loginTable = $("<table class='span8 offset2'/>").appendTo(_contentDiv);
-                //var row = $("<tr class='re-content-title-narrow'/>").appendTo(loginTable);
-                //var cell = $("<td/>").appendTo(row);
-                //$("<div style='margin:auto'>" + Application.Client.getText(_texts.welcomeText) + "</div>").appendTo(cell);
-
-                //row = $("<tr/>").appendTo(loginTable);
-                //cell = $("<td/>").appendTo(row);
-                //_userNameElem = $("<input type='text'>" + Application.Client.userName() + "</input>").appendTo(cell);
-
-                //row = $("<tr/>").appendTo(loginTable);
-                //cell = $("<td/>").appendTo(row);
-                //_passwordElem = $("<input type='password'/>").appendTo(cell);
-
-                //row = $("<tr/>").appendTo(loginTable);
-                //cell = $("<td/>").appendTo(row);
-                //// login submite button
-                //_signinButton = $("<button style='width:100%'>" + Application.Client.getText(_texts.loginText) + "</button>").appendTo(cell).button()
-                //    .on("click", _onClickSubmit);
-                
-                var loginRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
-                var containerDiv = $("<div class='col-md-2 col-md-offset-5 re-bordered'/>").appendTo(loginRowDiv);
+                // login sub-content
+                var loginSubContentDiv = $("<div class='row'/>").appendTo(_contentDiv);
+                var containerDiv = $("<div class='col-md-2 col-md-offset-5 re-bordered'/>").appendTo(loginSubContentDiv);
                 var rowDiv = $("<div class='row'/>").appendTo(containerDiv);
-                //var cellDiv = $("<div class='col-md-2 col-md-offset-5'/>").appendTo(rowDiv);
                 var loginTitle = $("<div class='re-title re-title-lg'>" + Application.Client.getText(_texts.welcomeText) + "</div>").appendTo(rowDiv);
 
                 rowDiv = $("<div class='row re-form-row'/>").appendTo(containerDiv);
-                //cellDiv = $("<div class='col-md-2 col-md-offset-5'/>").appendTo(rowDiv);
                 _userNameElem = $("<input class='form-control' type='text'>" + Application.Client.userName() + "</input>").appendTo(rowDiv);
 
                 rowDiv = $("<div class='row re-form-row'/>").appendTo(containerDiv);
-                //cellDiv = $("<div class='col-md-2 col-md-offset-5'/>").appendTo(rowDiv);
                 _passwordElem = $("<input class='form-control' type='password'/>").appendTo(rowDiv);
 
                 rowDiv = $("<div class='row re-form-row'/>").appendTo(containerDiv);
-                //cellDiv = $("<div class='col-md-2 col-md-offset-5'/>").appendTo(rowDiv);
-                _signinButton = $("<button class='btn btn-default btn-block'>" + Application.Client.getText(_texts.loginText) + "</button>").appendTo(rowDiv).button()
+                _signinButton = $("<button class='btn btn-default btn-block'>" + Application.Client.getText(_texts.loginText) + "</button>").appendTo(rowDiv)
+                    .button()
                     .on("click", _onClickSubmit);
 
-                //_errorDiv = $("<div style='display:none;max-width:640;margin:auto;color:red'/>").appendTo(_contentDiv);
                 _errorDiv = $("<div class='row text-center re-error' style='display:none;margin:auto;'/>").appendTo(_contentDiv);
             }
 

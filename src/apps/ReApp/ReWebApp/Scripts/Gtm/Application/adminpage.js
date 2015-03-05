@@ -145,38 +145,54 @@
 
             function _buildContentDiv() {
                 //_contentDiv = $("<div class='re-content' style='text-align:center;width:80%;height:80%;margin:auto;padding-top:10px;padding-bottom:20px'/>");
-                _contentDiv = $("<div class='re-content-wide'/>");
+                _contentDiv = $("<div class='container re-bordered'/>");
 
+                //var usersSubContentDiv = $("<div class='row re-bordered'/>").appendTo(_contentDiv);
                 // title
                 //_titleDiv = $("<div class='re-content-title' style='width:100%;display:block;'/>").appendTo(_contentDiv);
-                _titleDiv = $("<div class='re-content-title-wide'/>").appendTo(_contentDiv);
+                var titleRow = $("<div class='row re-title re-title-lg'/>").appendTo(_contentDiv);
+                _titleDiv = $("<div class='col-md-12'/>").appendTo(titleRow);
                 _titleDiv.text(_pageTitle());
 
                 // menu
-                var menuDiv = $("<div style='width:100%;display:block;text-align:left'/>").appendTo(_contentDiv);
-                _userListMenuDiv = $("<div style='display:none;text-align:left'/>").appendTo(menuDiv);
-                _newButton = $("<button>" + Application.Client.getText(_texts.buttonNewText) + "</button>").appendTo(_userListMenuDiv)
+                var menuRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
+                var menuLeftCellDiv = $("<div class='col-md-6'/>").appendTo(menuRowDiv);
+                //_userListMenuDiv = $("<div class='input-prepend input-append'/>").appendTo(menuLeftCellDiv);
+                _userListMenuDiv = $("<div class='input-group'/>").appendTo(menuLeftCellDiv);
+
+                var buttonGroupLeftDiv = $("<div class='input-group-btn' style='max-width:100px'/>").appendTo(_userListMenuDiv);
+                _newButton = $("<button type='button' class='btn btn-default'>"
+                    + Application.Client.getText(_texts.buttonNewText)
+                    + "</button>").appendTo(buttonGroupLeftDiv)
                     .button()
                     .on("click", _onClickNew);
-                _searchKeyElem = $("<input type='text'/>").appendTo(_userListMenuDiv);
-                //_searchSettingsButton = $("<button>[]</button>").appendTo(_userListMenuDiv)
-                //    .button()
-                //    .on("click", _onClickSearchSettings);
-                _searchButton = $("<button>" + Application.Client.getText(_texts.buttonSearchText) + "</button>").appendTo(_userListMenuDiv)
+
+                _searchKeyElem = $("<input type='text' class='form-control' style='max-width:100px'/>").appendTo(_userListMenuDiv);
+
+                var buttonGroupRightDiv = $("<div class='input-group-btn' style='max-width:100px'/>").appendTo(_userListMenuDiv);
+                _searchButton = $("<button class='btn btn-default'>"
+                    + Application.Client.getText(_texts.buttonSearchText)
+                    + "</button>").appendTo(buttonGroupRightDiv)
                     .button()
                     .on("click", _onClickSearch);
-                _logoutButton = $("<button style='display:inline;text-align:right'>" + Application.Client.getText(_texts.buttonLogoutText) + "</button>").appendTo(menuDiv)
+
+                var menuRightCellDiv = $("<div class='col-md-6'/>").appendTo(menuRowDiv);
+                _logoutButton = $("<button class='btn btn-default pull-right'>"
+                    + Application.Client.getText(_texts.buttonLogoutText)
+                    + "</button>").appendTo(menuRightCellDiv)
                     .button()
                     .on("click", _onClickLogout);
 
                 // user list
-                _userListDiv = $("<div style='text-align:left;overflow-x:scroll;display:none;'/>").appendTo(_contentDiv);
+                var contentRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
+                var contentCellDiv = $("<div class='col-md-12'/>").appendTo(contentRowDiv);
+                _userListDiv = $("<div style='overflow-x:scroll;display:none;'/>").appendTo(contentCellDiv);
 
                 // new user
-                _newUserDiv = $("<div style='text-align:left;display:none;'/>").appendTo(_contentDiv);
+                _newUserDiv = $("<div class='row' style='text-align:left;display:none;'/>").appendTo(contentCellDiv);
 
                 // edit user
-                _editUserDiv = $("<div style='text-align:left;display:none;'/>").appendTo(_contentDiv);
+                _editUserDiv = $("<div class='row' style='text-align:left;display:none;'/>").appendTo(contentCellDiv);
             }
 
             function _resetContentDiv() {
@@ -252,7 +268,7 @@
                         {
                             userCount: _USERS_COUNT,
                             key: _getSearchKey(),
-                            pattern: searchKey
+                            pattern: "%" + searchKey + "%"
                         },
                         _onPostLoadComplete);
                 }
@@ -351,7 +367,7 @@
                         _userListDiv.empty();
                         _userListMeta = responseData.Param.meta;
                         var users = responseData.Param.users;
-                        var userListTable = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_userListDiv);
+                        var userListTable = $("<table class='re-bordered'/>").appendTo(_userListDiv);
                         var headerRow = $("<tr class='re-bordered'/>").appendTo(userListTable);
                         $("<th class='re-bordered'>" + "</th>").appendTo(headerRow);
                         $("<th class='re-bordered'>" + "</th>").appendTo(headerRow);
@@ -388,7 +404,7 @@
 
                         _userListDiv.append(userListTable);
                         _userListDiv.css("display", "inherit");
-                        _userListMenuDiv.css("display", "inline");
+                        _userListMenuDiv.css("display", "table");
                         break;
                     case "error":
                         console.log("[error]: responseData.Param.message: " + responseData.Param.message);

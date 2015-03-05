@@ -24,6 +24,10 @@
 .re-form-row{
     padding:5px;
 }
+.input-group, .input-group-addon, .input-group-btn
+{
+    width:auto;
+}
 
 
 body{
