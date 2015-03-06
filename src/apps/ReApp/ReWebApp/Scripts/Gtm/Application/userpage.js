@@ -78,21 +78,34 @@
 
             function _buildContentDiv() {
                 //_contentDiv = $("<div class='re-content' style='text-align:center;width:80%;height:80%;margin:auto;padding-top:10px;padding-bottom:20px'/>");
-                _contentDiv = $("<div class='re-content-wide'/>");
-                
+                //_contentDiv = $("<div class='re-content-wide'/>");
+                _contentDiv = $("<div class='container re-bordered'/>");
+
                 // title
                 //_titleDiv = $("<div class='re-content-title' style='width:100%;display:block;'/>").appendTo(_contentDiv);
-                _titleDiv = $("<div class='re-content-title-wide'/>").appendTo(_contentDiv);
+                //_titleDiv = $("<div class='re-content-title-wide'/>").appendTo(_contentDiv);
+                //_titleDiv.text(_pageTitle());
+                var titleRow = $("<div class='row re-title re-title-lg'/>").appendTo(_contentDiv);
+                _titleDiv = $("<div class='col-md-12'/>").appendTo(titleRow);
                 _titleDiv.text(_pageTitle());
 
                 // menu
-                var menuDiv = $("<div style='width:100%;display:block;text-align:left'/>").appendTo(_contentDiv);
-                _logoutButton = $("<button>" + Application.Client.getText(_texts.buttonLogoutText) + "</button>").appendTo(menuDiv)
+                //var menuDiv = $("<div style='width:100%;display:block;text-align:left'/>").appendTo(_contentDiv);
+                var menuRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
+                var menuLeftCellDiv = $("<div class='col-md-6'/>").appendTo(menuRowDiv);
+                //_logoutButton = $("<button>" + Application.Client.getText(_texts.buttonLogoutText) + "</button>").appendTo(menuDiv)
+                //    .button()
+                //    .on("click", _onClickLogout);
+                var menuRightCellDiv = $("<div class='col-md-6'/>").appendTo(menuRowDiv);
+                _logoutButton = $("<button class='btn btn-default pull-right'>"
+                    + Application.Client.getText(_texts.buttonLogoutText)
+                    + "</button>").appendTo(menuRightCellDiv)
                     .button()
                     .on("click", _onClickLogout);
 
                 // user info
-                _userInfoDiv = $("<div style='text-align:left;display:none;'/>").appendTo(_contentDiv);
+                //_userInfoDiv = $("<div style='text-align:left;display:none;'/>").appendTo(_contentDiv);
+                _userInfoDiv = $("<div class='row' style='display:none;'/>").appendTo(_contentDiv);
 
                 // error
                 _errorDiv = $("<div style='display:none;'/>").appendTo(_contentDiv);
@@ -139,11 +152,28 @@
                         var user = responseData.Param.user;
 
                         _userInfoDiv.empty();
-                        var userTable = $("<table class='re-bordered'/>").appendTo(_userInfoDiv);
+                        // layout
+                        var contentCellDiv = $("<div class='col-md-4 col-md-offset-4'/>").appendTo(_userInfoDiv);
+                        var rowDiv = $("<div class='row'/>").appendTo(contentCellDiv);
+                        var cellDiv = $("<div class='col-md-12'/>").appendTo(rowDiv);
+
+                        //var userTable = $("<table class='re-bordered'/>").appendTo(_userInfoDiv);
+                        // table
+                        var table = $("<table class='table table-bordered table-striped table-condensed table-hover re-table'/>").appendTo(cellDiv);
+                        // table-header - empty so far
+                        var theadEmel = $("<thead/>").appendTo(table);
+                        var headerRow = $("<tr class='re-title'/>").appendTo(theadEmel);
+                        $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                        $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                        // table-body
+                        var tbodyElem = $("<tbody/>").appendTo(table);
                         for (var i = 0; i < _userMeta.length; ++i) {
-                            var row = $("<tr class='re-bordered'/>").appendTo(userTable);
-                            var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.userInfoRowTexts[i]) + "</td>").appendTo(row);
-                            cell = $("<td class='re-bordered'/>").appendTo(row);
+                            //var row = $("<tr class='re-bordered'/>").appendTo(userTable);
+                            //var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.userInfoRowTexts[i]) + "</td>").appendTo(row);
+                            //cell = $("<td class='re-bordered'/>").appendTo(row);
+                            var row = $("<tr class='re-userlist-cell'/>").appendTo(tbodyElem);
+                            var cell = $("<td>" + Application.Client.getText(_texts.userInfoRowTexts[i]) + "</div>").appendTo(row);
+                            cell = $("<td/>").appendTo(row);
                             var rowValue = user[_userMeta[i].dataName];
                             if ($.isValid(rowValue)) {
                                 cell.text(rowValue);

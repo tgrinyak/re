@@ -157,7 +157,6 @@
                 // menu
                 var menuRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
                 var menuLeftCellDiv = $("<div class='col-md-6'/>").appendTo(menuRowDiv);
-                //_userListMenuDiv = $("<div class='input-prepend input-append'/>").appendTo(menuLeftCellDiv);
                 _userListMenuDiv = $("<div class='input-group'/>").appendTo(menuLeftCellDiv);
 
                 var buttonGroupLeftDiv = $("<div class='input-group-btn' style='max-width:100px'/>").appendTo(_userListMenuDiv);
@@ -184,15 +183,13 @@
                     .on("click", _onClickLogout);
 
                 // user list
-                var contentRowDiv = $("<div class='row'/>").appendTo(_contentDiv);
-                var contentCellDiv = $("<div class='col-md-12'/>").appendTo(contentRowDiv);
-                _userListDiv = $("<div style='overflow-x:scroll;display:none;'/>").appendTo(contentCellDiv);
+                _userListDiv = $("<div class='row' style='display:none;'/>").appendTo(_contentDiv);
 
                 // new user
-                _newUserDiv = $("<div class='row' style='text-align:left;display:none;'/>").appendTo(contentCellDiv);
+                _newUserDiv = $("<div class='row' style='display:none;'/>").appendTo(_contentDiv);
 
                 // edit user
-                _editUserDiv = $("<div class='row' style='text-align:left;display:none;'/>").appendTo(contentCellDiv);
+                _editUserDiv = $("<div class='row' style='text-align:left;display:none;'/>").appendTo(_contentDiv);
             }
 
             function _resetContentDiv() {
@@ -225,11 +222,24 @@
                 console.log("New clicked");
 
                 _newUserDiv.empty();
-                var table = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_newUserDiv);
+                // layout
+                var contentCellDiv = $("<div class='col-md-4 col-md-offset-4'/>").appendTo(_newUserDiv);
+                var rowDiv = $("<div class='row'/>").appendTo(contentCellDiv);
+                var cellDiv = $("<div class='col-md-12'/>").appendTo(rowDiv);
+
+                // table
+                var table = $("<table class='table table-bordered table-striped table-condensed table-hover re-table'/>").appendTo(cellDiv);
+                // table-header - empty so far
+                var theadEmel = $("<thead/>").appendTo(table);
+                var headerRow = $("<tr class='re-title'/>").appendTo(theadEmel);
+                $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                // table-body
+                var tbodyElem = $("<tbody/>").appendTo(table);
                 for (var i = 0; i < _newUserMeta.length; ++i) {
-                    var row = $("<tr class='re-bordered'/>").appendTo(table);
-                    var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_newUserMeta[i]]) + "</div>").appendTo(row);
-                    cell = $("<td class='re-bordered'/>").appendTo(row);
+                    var row = $("<tr class='re-userlist-cell'/>").appendTo(tbodyElem);
+                    var cell = $("<td>" + Application.Client.getText(_texts.metaTexts[_newUserMeta[i]]) + "</div>").appendTo(row);
+                    cell = $("<td/>").appendTo(row);
                     var input;
                     switch (_newUserMeta[i]) {
                         case "password":
@@ -245,14 +255,18 @@
                     _newUserInputElements[_newUserMeta[i]] = input;
                 }
 
-                var footer = $("<div style='margin:auto;text-align:center'/>").appendTo(_newUserDiv);
-                _newUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserSubmitText) + "</button>").appendTo(footer)
+                // footer menu
+                rowDiv = $("<div class='row'/>").appendTo(contentCellDiv);
+                var footer = $("<div class='col-md-4 col-md-offset-4'/>").appendTo(rowDiv);
+                var buttonGroup = $("<div class='btn-group'/>").appendTo(footer);
+                _newUserSubmit = $("<button class='btn btn-default btn-sm inline'>" + Application.Client.getText(_texts.buttonNewUserSubmitText) + "</button>").appendTo(buttonGroup)
                     .button()
                     .on("click", _onClickNewUserSubmit);
-                _newUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserCancelText) + "</button>").appendTo(footer)
+                _newUserSubmit = $("<button class='btn btn-default btn-sm inline'>" + Application.Client.getText(_texts.buttonNewUserCancelText) + "</button>").appendTo(buttonGroup)
                     .button()
                     .on("click", _onClickNewUserCancel);
 
+                // display 
                 _userListDiv.css("display", "none");
                 _userListMenuDiv.css("display", "none");
                 _newUserDiv.css("display", "inherit");
@@ -365,35 +379,55 @@
                 switch (responseData.ResponseType) {
                     case "success":
                         _userListDiv.empty();
+                        var contentCellDiv = $("<div class='col-md-12'/>").appendTo(_userListDiv);
+                        var userListScrollableContentDiv = $("<div style='overflow-x:scroll;'/>").appendTo(contentCellDiv);
                         _userListMeta = responseData.Param.meta;
                         var users = responseData.Param.users;
-                        var userListTable = $("<table class='re-bordered'/>").appendTo(_userListDiv);
-                        var headerRow = $("<tr class='re-bordered'/>").appendTo(userListTable);
-                        $("<th class='re-bordered'>" + "</th>").appendTo(headerRow);
-                        $("<th class='re-bordered'>" + "</th>").appendTo(headerRow);
+                        var userListTable = $("<table class='table table-bordered table-striped table-condensed table-hover re-table'/>").appendTo(userListScrollableContentDiv);
+                        var theadEmel = $("<thead/>").appendTo(userListTable);
+                        var headerRow = $("<tr class='re-title'/>").appendTo(theadEmel);
+                        $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                        //$("<th/>").appendTo(headerRow);
                         for (var i = 0; i < _userListMeta.length; ++i) {
-                            var cell = $("<th class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_userListMeta[i]]) + "</th>").appendTo(headerRow);
+                            var cell = $("<th class='re-userlist-cell'>" + Application.Client.getText(_texts.metaTexts[_userListMeta[i]]) + "</th>").appendTo(headerRow);
                         }
+
+                        var tbodyEmel = $("<tbody/>").appendTo(userListTable);
                         for (var i = 0; i < users.length; ++i) {
-                            var row = $("<tr class='re-bordered'/>").appendTo(userListTable);
-                            var cell = $("<td class='re-bordered'/>").appendTo(row);
+                            var row = $("<tr/>").appendTo(tbodyEmel);
+                            var cell = $("<td class='re-userlist-cell span2'/>").appendTo(row);
                             var email = users.email;
-                            $("<button id='edit-" + users[i].email + "'>" + Application.Client.getText(_texts.buttonUserListEditText) + "</button>").appendTo(cell)
+                            var buttonGroup = $("<div class='btn-group'/>").appendTo(cell);
+                            var editButton = $("<button class='btn btn-default btn-xs inline' id='edit-" + users[i].email + "'>" + Application.Client.getText(_texts.buttonUserListEditText) + "</button>").appendTo(buttonGroup)
                                 .button()
+                                .data("email", users[i].email)
                                 .on("click", function (event) {
-                                    _editUser($(this)[0].id.split("-")[1]);
+                                    //_editUser($(this)[0].id.split("-")[1]);
+                                    // we maight have problem here lately
+                                    var elem = $(event.target);
+                                    if (!elem.is("button")) {
+                                        elem = $(event.target.parentNode);
+                                    }
+                                    _editUser(elem.data("email"));
                                 });
-                            cell = $("<td class='re-bordered'/>").appendTo(row);
-                            $("<button id='remove-" + users[i].email + "'>" + Application.Client.getText(_texts.buttonUserListRemoveText) + "</button>").appendTo(cell)
+                            //cell = $("<td/>").appendTo(row);
+                            $("<button class='btn btn-default btn-xs inline' id='remove-" + users[i].email + "'>" + Application.Client.getText(_texts.buttonUserListRemoveText) + "</button>").appendTo(buttonGroup)
                                 .button()
+                                .data("email", users[i].email)
                                 .on("click", function (event) {
-                                    var un = $(this)[0].id.split("-")[1];
+                                    //var un = $(this)[0].id.split("-")[1];
+                                    // we maight have problem here lately
+                                    var elem = $(event.target);
+                                    if (!elem.is("button")) {
+                                        elem = $(event.target.parentNode);
+                                    }
+                                    var un = elem.data("email");
                                     if (confirm(Application.Client.getText(_texts.removeConfirmMessageText))) {
                                         _removeUser(un);
                                     }
                                 });
                             for (var j = 0; j < _userListMeta.length; ++j) {
-                                cell = $("<td class='re-bordered'/>").appendTo(row);
+                                cell = $("<td class='re-userlist-cell'/>").appendTo(row);
                                 var cellValue = users[i][_userListMeta[j]];
                                 if ($.isValid(cellValue)) {
                                     cell.text(cellValue);
@@ -402,7 +436,7 @@
                             row.appendTo(userListTable);
                         }
 
-                        _userListDiv.append(userListTable);
+                        _userListDiv.append(contentCellDiv);
                         _userListDiv.css("display", "inherit");
                         _userListMenuDiv.css("display", "table");
                         break;
@@ -469,11 +503,29 @@
                     case "success":
                         var user = responseData.Param.user;
                         _editUserDiv.empty();
-                        var table = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_editUserDiv);
+                        // layout
+                        var contentCellDiv = $("<div class='col-md-4 col-md-offset-4'/>").appendTo(_editUserDiv);
+                        var rowDiv = $("<div class='row'/>").appendTo(contentCellDiv);
+                        var cellDiv = $("<div class='col-md-12'/>").appendTo(rowDiv);
+
+                        //var table = $("<table class='re-bordered' style='margin:left;'/>").appendTo(_editUserDiv);
+                        // table
+                        var table = $("<table class='table table-bordered table-striped table-condensed table-hover re-table'/>").appendTo(cellDiv);
+                        // table-header - empty so far
+                        var theadEmel = $("<thead/>").appendTo(table);
+                        var headerRow = $("<tr class='re-title'/>").appendTo(theadEmel);
+                        $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                        $("<th class='re-userlist-cell'/>").appendTo(headerRow);
+                        // table-body
+                        var tbodyElem = $("<tbody/>").appendTo(table);
                         for (var i = 0; i < _editUserMeta.length; ++i) {
-                            var row = $("<tr class='re-bordered'/>").appendTo(table);
-                            var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_editUserMeta[i]]) + "</div>").appendTo(row);
-                            cell = $("<td class='re-bordered'/>").appendTo(row);
+                            //var row = $("<tr class='re-bordered'/>").appendTo(table);
+                            //var cell = $("<td class='re-bordered'>" + Application.Client.getText(_texts.metaTexts[_editUserMeta[i]]) + "</div>").appendTo(row);
+                            //cell = $("<td class='re-bordered'/>").appendTo(row);
+                            //var input;
+                            var row = $("<tr class='re-userlist-cell'/>").appendTo(tbodyElem);
+                            var cell = $("<td>" + Application.Client.getText(_texts.metaTexts[_newUserMeta[i]]) + "</div>").appendTo(row);
+                            cell = $("<td/>").appendTo(row);
                             var input;
                             switch (_editUserMeta[i]) {
                                 case "email":
@@ -496,13 +548,24 @@
                             _editUserInputElements[_editUserMeta[i]] = input;
                         }
 
-                        var footer = $("<div style='margin:auto;text-align:center'/>").appendTo(_editUserDiv);
-                        _editUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserSubmitText) + "</button>").appendTo(footer)
+                        //var footer = $("<div style='margin:auto;text-align:center'/>").appendTo(_editUserDiv);
+                        //_editUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserSubmitText) + "</button>").appendTo(footer)
+                        //    .button()
+                        //    .on("click", _onClickEditUserSubmit);
+                        //_editUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserCancelText) + "</button>").appendTo(footer)
+                        //    .button()
+                        //    .on("click", _onClickEditUserCancel);
+                        // footer menu
+                        rowDiv = $("<div class='row'/>").appendTo(contentCellDiv);
+                        var footer = $("<div class='col-md-4 col-md-offset-4'/>").appendTo(rowDiv);
+                        var buttonGroup = $("<div class='btn-group'/>").appendTo(footer);
+                        _editUserSubmit = $("<button class='btn btn-default btn-sm inline'>" + Application.Client.getText(_texts.buttonNewUserSubmitText) + "</button>").appendTo(buttonGroup)
                             .button()
                             .on("click", _onClickEditUserSubmit);
-                        _editUserSubmit = $("<button style='display:inline'>" + Application.Client.getText(_texts.buttonNewUserCancelText) + "</button>").appendTo(footer)
+                        _editUserSubmit = $("<button class='btn btn-default btn-sm inline'>" + Application.Client.getText(_texts.buttonNewUserCancelText) + "</button>").appendTo(buttonGroup)
                             .button()
                             .on("click", _onClickEditUserCancel);
+
 
                         _userListDiv.css("display", "none");
                         _userListMenuDiv.css("display", "none");

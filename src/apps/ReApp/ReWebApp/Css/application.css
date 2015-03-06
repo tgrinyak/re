@@ -28,6 +28,19 @@
 {
     width:auto;
 }
+.re-table{
+    background-color: #f0f0f0;
+}
+.re-userlist-cell{
+    white-space:nowrap;
+}
+.btn-group {
+  white-space: nowrap;
+}
+.btn-group .btn{
+    float: none;
+    display: inline-block;
+}
 
 
 body{
