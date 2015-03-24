@@ -4,12 +4,13 @@
 
 <!DOCTYPE html>
 
-<html>
+<html ng-app="Gtm.app">
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Default - Load</title>
     <script src="~/Scripts/jquery-1.9.1.js"></script>
     <script src="~/Scripts/jquery-ui-1.11.2.js"></script>
+    <script src="~/Scripts/angular.js"></script>
     <script src="~/Scripts/Gtm/System.js"></script>
     <script src="~/Scripts/Gtm/Application/client.js"></script>
     <script src="~/Scripts/Gtm/Application/loginpage.js"></script>
@@ -17,13 +18,20 @@
     <script src="~/Scripts/Gtm/Application/userpage.js"></script>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Css/application.css" rel="stylesheet" />
+    <script src="~/Scripts/Gtm/app.js"></script>
 </head>
-<body class="container re-background">
+<body class="container re-background" ng-controller="appController">
     Default - Load
+    <div ng-switch="app.visiblePage">
+        <div ng-switch-when="login">
+            <div ng-include src="'Scripts/Gtm/views/loginView.html'" />
+        </div>
+    </div>
 </body>
 </html>
 <script type="text/javascript">
     (function () {
-        Gtm.Application.Client.showPage();
+        //Gtm.Application.Client.showPage();
+        //Gtm.app();
     })();
 </script>
