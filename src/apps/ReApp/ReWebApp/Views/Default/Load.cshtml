@@ -1,10 +1,35 @@
-﻿@{
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Default - Load</title>
+    <script src="~/Scripts/angular.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Css/application.css" rel="stylesheet" />
+    <script src="~/Scripts/Gtm/app.js"></script>
+</head>
+<body class="re-background" ng-app="Gtm.app">
+    <div ng-controller="appController">
+        <div ng-show="app.visiblePage == 'login'">
+            <div ng-include src="'Scripts/Gtm/views/loginView.html'"></div>
+        </div>
+        <div ng-show="app.visiblePage == 'admin'">
+            <div ng-include src="'Scripts/Gtm/views/adminView.html'"></div>
+        </div>
+        <div ng-show="app.visiblePage == 'user'">
+            <div ng-include src="'Scripts/Gtm/views/userView.html'"></div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+@*@{
     Layout = null;
 }
 
 <!DOCTYPE html>
 
-<html ng-app="Gtm.app">
+<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Default - Load</title>
@@ -20,18 +45,31 @@
     <link href="~/Css/application.css" rel="stylesheet" />
     <script src="~/Scripts/Gtm/app.js"></script>
 </head>
-<body class="container re-background" ng-controller="appController">
-    Default - Load
-    <div ng-switch="app.visiblePage">
-        <div ng-switch-when="login">
-            <div ng-include src="'Scripts/Gtm/views/loginView.html'" />
+<body class="re-background" ng-app="Gtm.app">
+    <div ng-controller="appController">
+        <div>
+            <div ng-show="app.visiblePage == 'login'">
+                <div ng-include src="'Scripts/Gtm/views/loginView.html'" />
+            </div>
+        </div>
+
+        <div>
+            <div ng-show="app.visiblePage == 'admin'">
+                <div ng-include src="'Scripts/Gtm/views/adminView.html'" />
+            </div>
+        </div>
+
+        <div>
+            <div ng-show="app.visiblePage == 'user'">
+                <div ng-include src="'Scripts/Gtm/views/userView.html'" />
+            </div>
         </div>
     </div>
 </body>
-</html>
-<script type="text/javascript">
+</html>*@
+@*<script type="text/javascript">
     (function () {
-        //Gtm.Application.Client.showPage();
-        //Gtm.app();
+        Gtm.Application.Client.showPage();
+        Gtm.app();
     })();
-</script>
+</script>*@

@@ -3,19 +3,24 @@
         <div class="col-md-2 col-md-offset-5 re-bordered">
             <div class="row">
                 <div class="re-title re-title-lg">
-                    qwerty
+                    {{texts.welcomText}}
                 </div>
             </div>
             <div class="row re-form-row">
-                <input class="form-control" type="text" />
+                <input class="form-control" type="text" ng-model="credentials.userName" />
             </div>
             <div class="row re-form-row">
-                <input class="form-control" type="password" />
+                <input class="form-control" type="password" ng-model="credentials.password" />
             </div>
             <div class="row re-form-row">
-                <button class="btn btn-default btn-block">zxcvb</button>
+                <button class="btn btn-default btn-block" ng-click="funcs.loginClickAction()">
+                    {{texts.loginText}}
+                </button>
             </div>
         </div>
     </div>
-    <div class="row text-center re-error" style="display:none;margin:auto;" />
+    <!--<div class="row text-center re-error" style="display:none;margin:auto;" />-->
+    <div class="row text-center re-error" ng-show="undefined!==error" style="margin:auto;">
+        {{error.message}}
+    </div>
 </div>
