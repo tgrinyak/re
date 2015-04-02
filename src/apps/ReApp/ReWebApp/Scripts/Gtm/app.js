@@ -84,7 +84,7 @@
         }]);
 
         // controllers
-        app.controller("appController", ["$scope", "shareService", function ($scope, shareService) {
+        app.controller("appController", ["$scope", "$rootScope", "shareService", function ($scope, $rootScope, shareService) {
             var app = {
                 visiblePage: "login",
                 getVisiblePage: function () {
@@ -102,6 +102,7 @@
                     session.userName(arg.uName);
                     session.userRole(arg.uRole.toLowerCase());
                     $scope.app.visiblePage = session.userRole();
+                    $rootScope.$broadcast("ac_onLoginSucceed", session.userRole());
                 });
 
                 $scope.$on('ac_onLogout', function (event, arg) {
@@ -251,6 +252,9 @@
             var isActionsDisabled = false;
             var error = undefined;
 
+            var metas = [];
+            var user = {};
+
             var funcs = {
                 title: function () {
                     var session = shareService.session();
@@ -265,6 +269,8 @@
                     if (!isActionsDisabled) {
                         console.log("'log out' clicked!");
                         isActionsDisabled = true;
+                        $scope.metas = [];
+                        $scope.user = {};
                         if (undefined !== $scope.error) {
                             $scope.error = undefined;
                         }
@@ -281,13 +287,55 @@
                                 isActionsDisabled = false;
                             });
                     }
+                },
+
+                load: function () {
+                    console.log("userController.load()");
+
+                    var session = shareService.session();
+                    isActionsDisabled = true;
+                    if (undefined !== $scope.error) {
+                        $scope.error = undefined;
+                    }
+
+                    gtmHttp.post("User/Load", {userName: session.userName()})
+                        .success(function (data, status, headers, config) {
+                            console.log("loadAction(): load succeed, ResponseType: " + data.ResponseType);
+                            switch (data.ResponseType) {
+                                case "success":
+                                    $scope.metas = data.Param.metas;
+                                    $scope.user = data.Param.user;
+                                    break;
+                                case "error":
+                                    $scope.error = data.Param;
+                                    break;
+                            }
+                            isActionsDisabled = false;
+                        })
+                        .error(function (data, status, headers, config) {
+                            console.log("loadAction(): load post error, status: " + status);
+                            isActionsDisabled = false;
+                        });
                 }
             };
 
             (function () {
                 $scope.texts = texts;
                 $scope.error = error;
+                $scope.metas = metas;
+                $scope.user = user;
                 $scope.funcs = funcs;
+
+                $scope.$on('ac_onLoginSucceed', function (event, arg) {
+                    console.log('userController.ac_onLoginSucceed(' + arg + ')');
+                    if ('user' !== arg) {
+                        return;
+                    }
+
+                    $scope.funcs.load();
+                });
+
+
             })();
         }]);
 

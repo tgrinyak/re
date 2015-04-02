@@ -33,7 +33,8 @@ namespace Gtm.ReWebApp.Controllers
                                                 ", first_name_furigana" +
                                                 ", last_name" +
                                                 ", last_name_furigana" +
-                                                ", date_of_birth, sex" +
+                                                ", date_of_birth" +
+                                                ", sex" +
                                                 ", contact_information" +
                                                 ", post_number" +
                                                 ", address" +
@@ -50,22 +51,49 @@ namespace Gtm.ReWebApp.Controllers
                             {
                                 if (reader.Read())
                                 {
+                                    List<string> metas = new List<string>();
                                     Dictionary<string, object> record = new Dictionary<string, object>();
                                     for (int i = 0; i < reader.FieldCount; ++i)
                                     {
+                                        var name = reader.GetName(i);
+                                        metas.Add(name);
+                                        // gatharing meta info
+                                        //if (0 == i)
+                                        //{
+                                        //    switch (name)
+                                        //    {
+                                        //        case "email":
+                                        //        case "role":
+                                        //        case "first_name":
+                                        //        case "first_name_furigana":
+                                        //        case "last_name":
+                                        //        case "last_name_furigana":
+                                        //        case "date_of_birth":
+                                        //        case "sex":
+                                        //        case "contact_information":
+                                        //        case "post_number":
+                                        //        case "address":
+                                        //        case "registrated_service":
+                                        //        case "loan_payment_period":
+                                        //        case "loan_value":
+                                        //        default:
+                                        //            break;
+                                        //    }
+                                        //}
                                         var value = reader.GetValue(i);
                                         if (value is DateTime)
                                         {
-                                            record.Add(reader.GetName(i), ((DateTime)value).ToString("yyyy-MM-dd"));
+                                            record.Add(name, ((DateTime)value).ToString("yyyy-MM-dd"));
                                         }
                                         else
                                         {
-                                            record.Add(reader.GetName(i), value);
+                                            record.Add(name, value);
                                         }
                                     }
 
                                     Dictionary<string, object> responseParam = new Dictionary<string, object>();
                                     responseParam.Add(ClientSessionFilterAttribute.CLIENT_SESSION_ID_ITEM_NAME, base.ClientSession.SessionGuid);
+                                    responseParam.Add("metas", metas.ToArray());
                                     responseParam.Add("user", record);
 
                                     jsonResponse = new SuccessJsonResponse(responseParam);
